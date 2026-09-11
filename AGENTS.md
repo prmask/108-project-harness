@@ -81,12 +81,11 @@ When information conflicts, use the following order of authority:
 1. Explicit current user instruction
 2. Experiment specification
 3. Product specification
-4. Approved architecture documentation
-5. Architecture Decision Records
-6. AGENTS.md
-7. Approved skills
-8. Project memory
-9. Agent assumptions
+4. Architecture decisions
+5. AGENTS.md
+6. Skills
+7. Memory
+8. Agent assumptions
 
 Lower-level information must not silently override higher-level information.
 
