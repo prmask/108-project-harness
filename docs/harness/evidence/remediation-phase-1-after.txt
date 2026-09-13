@@ -1,0 +1,6 @@
+Secret scan passed.
+Database change check passed: no database/schema change detected.
+Experiment change check passed: no experiment specification change detected.
+Pre-commit checks: package.json not found; code checks cannot run yet.
+Install the application scaffold before enabling the full pre-commit hook.
+exit=0

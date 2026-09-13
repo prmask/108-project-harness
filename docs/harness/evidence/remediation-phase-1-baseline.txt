@@ -1,0 +1,91 @@
+Secret scan: nothing to scan.
+Database change check: no staged files.
+Experiment change check: no staged files.
+Pre-commit checks: package.json not found; code checks cannot run yet.
+Install the application scaffold before enabling the full pre-commit hook.
+exit=1
+
+
+Step 2 — Secret checker remediation and re-verification
+
+Original baseline finding:
+
+.agents/hooks/check-secrets.sh: line 39: unexpected EOF while looking for matching `''
+syntax exit=1
+
+Root cause:
+
+Line 38 contained a single-quoted Bash string containing unescaped single
+quotes, causing the Bash parser to report an unmatched single quote.
+
+Remediation:
+
+Corrected the credential-pattern quoting in .agents/hooks/check-secrets.sh.
+No other secret-scanning logic was changed.
+
+Post-remediation syntax verification:
+
+bash -n .agents/hooks/check-secrets.sh
+syntax exit=0
+
+Normal execution verification:
+
+.agents/hooks/check-secrets.sh
+Secret scan passed.
+secret-check exit=0
+
+Positive enforcement test:
+
+A temporary staged .harness-secret-test.env containing a test API key was
+created and scanned.
+
+Result:
+
+BLOCKED: possible secret detected matching pattern:
+(api[_-]?key|access[_-]?token|secret[_-]?key|client[_-]?secret)...
+Secret scan failed. Remove the secret/sensitive file and rotate any credential
+that may have been exposed.
+secret-test exit=1
+
+The temporary test fixture was then removed.
+
+Conclusion:
+
+Secret checker syntax — PASS
+Normal secret scan — PASS
+Staged secret detection — PASS
+
+
+Step 18 — Tracked Git hook enforcement
+
+Repository-level hook:
+
+.githooks/pre-commit
+
+Git configuration in this checkout:
+
+core.hooksPath=.githooks
+
+Enforcement test:
+
+git commit -m "test: verify tracked pre-commit enforcement"
+
+Observed:
+
+Secret scan passed.
+Database change check passed: no database/schema change detected.
+Experiment change check passed: no experiment specification change detected.
+Pre-commit checks: package.json not found; code checks cannot run yet.
+Install the application scaffold before enabling the full pre-commit hook.
+
+Commit was blocked by the package.json gate.
+
+Conclusion:
+
+Tracked Git hook invocation — PASS
+Secret check through Git hook — PASS
+Database check through Git hook — PASS
+Experiment check through Git hook — PASS
+Invalid/incomplete repository state blocked — PASS
+Fresh-clone hook activation — NOT YET IMPLEMENTED
+exit=0

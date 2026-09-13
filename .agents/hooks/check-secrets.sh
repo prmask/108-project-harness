@@ -35,7 +35,7 @@ patterns=(
   'AKIA[0-9A-Z]{16}'
   'AIza[0-9A-Za-z_-]{30,}'
   '-----BEGIN (RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----'
-  '(api[_-]?key|access[_-]?token|secret[_-]?key|client[_-]?secret)[[:space:]]*[:=][[:space:]]*["'"'][A-Za-z0-9_./+=-]{16,}["'"']'
+  '(api[_-]?key|access[_-]?token|secret[_-]?key|client[_-]?secret)[[:space:]]*[:=][[:space:]]*[\"\x27][A-Za-z0-9_./+=-]{16,}[\"\x27]'
   'gh[pousr]_[A-Za-z0-9_]{20,}'
 )
 
