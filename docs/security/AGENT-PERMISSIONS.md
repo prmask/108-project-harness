@@ -198,4 +198,4 @@ Permission behavior is tested in:
 
 `docs/harness/HARNESS-VERIFICATION.md`
 
-Security-specific harness tests are defined by Step 18 and should be executed before the harness is considered ready.
+Harness-level verification is defined in `docs/harness/HARNESS-VERIFICATION.md` and should be executed before the harness is considered ready.

@@ -16,10 +16,24 @@ Independently identify defects, risks, and unnecessary complexity in completed w
 10. Report findings by severity.
 
 ## Rules
-- Review with fresh context whenever practical.
+- For significant changes, review from fresh context and do not rely on the implementer's explanation as evidence.
+- For trivial changes, fresh-context review may be omitted when no meaningful risk exists.
+- If review findings require changes, the corrected change must receive a fresh re-review before verification.
 - Do not assume passing tests prove correctness.
 - Do not approve behavior that conflicts with authoritative documentation.
 - Distinguish confirmed defects from suggestions.
 
 ## Output
 Findings with severity, evidence, affected location, and recommended remediation; or an explicit approval with verification performed.
+
+## Review Evidence
+For significant changes, record the review result with:
+- review scope and files/diff examined;
+- fresh-context status;
+- findings with severity, evidence, affected location, and recommended remediation;
+- fixes made for blocking findings;
+- fresh re-review result after required fixes;
+- final review disposition;
+- verification performed after the final review.
+
+Do not record a clean approval without stating what was actually reviewed.

@@ -28,7 +28,7 @@ User request
 6. Test Engineer defines tests before implementation where practical.
 7. Implementer implements only the approved scope.
 8. Run unit/integration/E2E tests appropriate to the change.
-9. Code Reviewer reviews with fresh context where practical.
+9. Code Reviewer reviews significant changes from fresh context; trivial changes may omit fresh-context review when no meaningful risk exists.
 10. Run Security Reviewer, Data Integrity, or Experiment Scientist when the change affects their areas.
 11. Run typecheck, lint, build, and other required verification.
 12. Update authoritative documentation.

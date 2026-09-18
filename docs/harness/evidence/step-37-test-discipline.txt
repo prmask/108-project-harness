@@ -1,0 +1,92 @@
+STEP 37 — RERUN STEP 11
+=======================
+
+Scope
+-----
+Test infrastructure
+TDD
+Regression tests
+Experiment-critical tests
+
+Test infrastructure
+--------------------
+Command:
+  pnpm test
+
+Result:
+  Vitest v5.0.0
+  Test Files: 3 passed (3)
+  Tests: 9 passed (9)
+  Exit code: 0
+
+Test files:
+  tests/harness/database-change.test.ts
+  tests/harness/experiment-integrity.test.ts
+  tests/harness/helpers/git-test-repo.ts
+  tests/harness/secrets.test.ts
+
+TDD
+---
+.agents/skills/tdd/SKILL.md defines:
+  1. Read requirements and acceptance criteria.
+  2. Identify deterministic behavior and edge cases.
+  3. Write the smallest failing test.
+  4. Implement the minimum behavior.
+  5. Run relevant tests.
+  6. Refactor without changing behavior.
+  7. Add regression tests for discovered bugs.
+  8. Run broader verification.
+
+Regression tests
+----------------
+The current harness test suite contains executable regression/enforcement
+coverage for:
+  - experiment-definition change protection;
+  - database-change protection;
+  - secret detection.
+
+All current harness tests pass.
+
+Experiment-critical requirements
+--------------------------------
+The TDD skill explicitly requires coverage for:
+  - Day 1–46 scoring under Definition v1 (13/13);
+  - Day 47–108 scoring under the current later threshold (>=8/13);
+  - no retroactive rescoring;
+  - 3/6/9 repetition counts;
+  - 108-day date boundaries;
+  - missing data versus zero;
+  - historical data preservation;
+  - experiment amendments and versioning;
+  - revenue versus profit and opportunity value versus realized revenue.
+
+The Test Engineer agent identifies the following high-priority areas:
+  - Days 1–46 use Definition v1: 13/13;
+  - Days 47–108 use the >=8/13 threshold;
+  - historical scoring is never retroactively recalculated;
+  - missing data is not treated as zero;
+  - observations are not overwritten;
+  - calculated metrics are reproducible.
+
+Current implementation scope
+----------------------------
+No application implementation files exist under src/.
+No experiment-scoring implementation exists.
+No production experiment-critical behavioral tests therefore exist yet.
+
+This limitation is recorded explicitly rather than treating the passing
+harness tests as evidence that unimplemented application behavior works.
+
+Status
+------
+PASS — test infrastructure, TDD discipline, regression-test capability,
+and experiment-critical test requirements are established and verified.
+
+Scope limitation:
+Experiment-critical production behavior is NOT YET TESTABLE because the
+application/scoring implementation has not yet been built.
+
+Verification date:
+2026-09-18
+
+No unrelated working-tree changes were modified by this step.

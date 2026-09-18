@@ -1,0 +1,46 @@
+Step 31 — Protect database changes
+
+Date: 2026-09-17
+
+Configuration
+- .claude/settings.json corrected from invalid top-level matcher/hooks structure to PreToolUse matcher configuration.
+- claude doctor: no invalid settings reported.
+- python3 -m json.tool .claude/settings.json: PASS.
+- bash -n .claude/hooks/check-database-change.sh: PASS.
+- bash -n .claude/hooks/check-experiment-change.sh: PASS.
+- bash -n .claude/hooks/guard-destructive-command.sh: PASS.
+
+Claude database adapter tests
+- Protected migration without MIGRATION_VERIFIED: BLOCKED, EXIT_CODE=2.
+- Protected migration with MIGRATION_VERIFIED=true: ALLOWED, EXIT_CODE=0.
+- Ordinary src/example.ts: ALLOWED, EXIT_CODE=0.
+- Absolute repository path to db/migrations/001-test.sql: BLOCKED, EXIT_CODE=2.
+- src/db/schema.ts: BLOCKED, EXIT_CODE=2.
+- src/db/queries.ts: ALLOWED, EXIT_CODE=0.
+- data/experiment.db: BLOCKED, EXIT_CODE=2.
+
+Git enforcement
+- Temporary db/migrations/001-step31-test.sql was staged.
+- Normal git commit attempt was blocked by .agents/hooks/check-database-change.sh.
+- Observed output included:
+  Database-related change detected: db/migrations/001-step31-test.sql
+  BLOCKED: database/schema change detected without explicit migration verification.
+- Temporary migration test file removed.
+- No files remain staged after cleanup.
+
+Quality verification
+- pnpm verify: PASS.
+- ESLint: PASS.
+- TypeScript typecheck: PASS.
+- Vitest: 3 test files passed, 8 tests passed.
+- Build: PASS (current project build script is tsc --noEmit).
+
+Runtime verification limitation
+- claude doctor confirmed project settings are valid.
+- A non-interactive Claude hook lifecycle test was attempted but did not complete; therefore live Claude Edit/Write hook execution is not claimed as independently proven by this evidence record.
+
+Architecture
+- Claude runtime adapter: .claude/hooks/check-database-change.sh
+- Canonical Git-stage database guard: .agents/hooks/check-database-change.sh
+- Git commit chain: .githooks/pre-commit → .agents/hooks/pre-commit.sh → check-database-change.sh
+- Destructive-command adapter exists at .claude/hooks/guard-destructive-command.sh but is not registered in the current .claude/settings.json and is outside the specific Step 31 database-file Edit/Write control tested here.

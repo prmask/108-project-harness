@@ -9,6 +9,8 @@ HOOKS_DIR="$ROOT/.agents/hooks"
 "$HOOKS_DIR/check-secrets.sh"
 "$HOOKS_DIR/check-database-change.sh"
 "$HOOKS_DIR/check-experiment-change.sh"
+"$HOOKS_DIR/check-ui-change.sh"
+"$HOOKS_DIR/check-missing-tests.sh"
 
 if [[ ! -f package.json ]]; then
   echo "Pre-commit checks: package.json not found; code checks cannot run yet." >&2

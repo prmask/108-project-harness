@@ -2,7 +2,7 @@
 
 The command layer is intentionally thin.
 
-Commands are **user-facing entry points**, not independent workflows. Each command delegates to an existing documented workflow and references the relevant reusable skills and agents.
+Commands are **user-facing entry points**, not independent workflows. Each command delegates to an existing documented workflow where one exists and references the relevant reusable skills and agents.
 
 ## Design principles
 
@@ -21,11 +21,13 @@ Commands are **user-facing entry points**, not independent workflows. Each comma
 | `/plan` | `new-feature.md` | `feature-planning`, `ux-ui-design` when UI changes |
 | `/research` | `research.md` | `research-first` |
 | `/implement` | `new-feature.md` | `frontend-feature`, `tdd`, `ux-ui-design` when UI changes |
-| `/test` | `bug-fix.md` / `new-feature.md` verification stages | `tdd`, `e2e-testing` |
-| `/review` | `new-feature.md` review stages | `code-review`, `ux-ui-design` when UI changes |
+| `/test` | `new-feature.md` | `tdd`, `e2e-testing` |
+| `/review` | `new-feature.md` review stages; conditional specialist review | `code-review`; `ux-ui-design` when UI changes |
+
+Specialist agents are selected conditionally by the review workflow: `data-integrity` + `experiment-scientist` for experiment changes, and `security-reviewer` for security-sensitive changes.
 | `/security` | `security-change.md` | `security-review` |
 | `/verify` | relevant workflow's verification stage | `tdd`, `e2e-testing`, `experiment-integrity` |
-| `/memory` | `memory-management.md` | `memory-management` |
+| `/memory` | `.agents/memory/` architecture | — |
 | `/experiment-review` | `experiment-change.md` / `weekly-review.md` as applicable | `experiment-integrity`, `data-analysis` |
 | `/weekly-review` | `weekly-review.md` | `data-analysis`, `experiment-integrity` |
 | `/release` | `release.md` | `release` |

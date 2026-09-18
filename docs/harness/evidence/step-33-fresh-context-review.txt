@@ -1,0 +1,161 @@
+Step 33 — Add fresh-context review
+
+Date: 2026-09-17
+
+Objective
+- Require significant changes to receive an independent fresh-context Code Reviewer review.
+- Prevent the reviewer from treating the implementer's explanation as evidence.
+- Require fresh re-review after fixes to review findings before verification.
+- Record sufficient review evidence to establish what was actually reviewed.
+
+Implementation
+- Updated .agents/skills/code-review/SKILL.md.
+- Significant changes now require fresh-context review.
+- Trivial changes may omit fresh-context review only when no meaningful risk exists.
+- Findings requiring changes must receive a fresh re-review before verification.
+- Added a review-evidence contract covering review scope, fresh-context status, findings, fixes, re-review, final disposition, and subsequent verification.
+- Updated .agents/workflows/new-feature.md.
+- Updated .agents/workflows/bug-fix.md.
+- Updated .agents/workflows/refactor.md.
+- Updated .agents/workflows/security-change.md.
+- Updated .agents/workflows/experiment-change.md.
+- These workflows now place fresh-context review before normal/final verification where applicable.
+
+Existing supporting controls confirmed
+- .agents/agents/code-reviewer.md already requires fresh context, actual diff/surrounding-code review, independent assessment, severity-based findings, and explicit reporting when no blocking findings exist.
+- .agents/commands/review.md already invokes the Code Reviewer and requires independent review where practical.
+- docs/architecture/AGENT-SYSTEM.md already defines Code Reviewer as the fresh-context reviewer and includes it in feature and experiment/scoring collaboration.
+- AGENTS.md already requires fresh-context review for significant changes whenever practical and states that the reviewer must not assume implementation-agent success.
+- No existing dedicated review-evidence format was found before this change.
+
+Verification status
+- Workflow and skill changes were inspected with git diff.
+- Automated repository verification has not yet been run for Step 33.
+- Actual fresh-context behavioral review testing has not yet been completed.
+- Step 33 is not yet accepted.
+
+Remaining Step 33 validation
+- Perform a fresh-context review against an actual change.
+- Demonstrate a review finding, corrective fix, and fresh re-review where applicable.
+- Record the actual review result and evidence.
+- Run independent verification after the final review.
+- Run final repository integrity checks.
+
+Actual fresh-context behavioral review
+
+- Invocation: `/review`
+- Reviewer: `@code-review`
+- Review context: separate/background Code Reviewer context.
+- Branch reviewed: `remediation/enforcement-phase-1`.
+- The reviewer independently inspected the actual repository diff and surrounding files.
+- Review completed with 6 findings.
+
+Findings
+1. `.agents/hooks/check-secrets.sh:38` — correctness.
+   - The credential-pattern regex uses `\x27` inside a `grep -E` bracket class.
+   - The reviewer reported that POSIX ERE does not interpret `\x27` as the intended single-quote character in this context.
+   - Consequence reported by reviewer: single-quoted secrets may no longer be detected.
+   - Existing tests do not cover this single-quoted form.
+
+2. `.claude/settings.json:1` — security gap.
+   - `guard-destructive-command.sh` exists but the current settings register only an `Edit|Write` PreToolUse matcher.
+   - The reviewer reported that the destructive-command guard therefore does not run for Bash commands.
+
+3. `.agents/hooks/pre-commit.sh:9` — correctness.
+   - `hooks.config.md` documents pre-commit as running Secrets + DB + experiment + UI checks + typecheck + tests.
+   - The reviewer reported that `pre-commit.sh` currently invokes only secrets, database, and experiment checks.
+
+4. `tests/harness/helpers/git-test-repo.ts:6` — maintainability.
+   - The reviewer reported that the shared helper is exported but unused.
+   - Three test files contain duplicated inline versions.
+
+5. `package.json:8` — efficiency.
+   - `build` and `typecheck` both execute `tsc --noEmit`.
+   - The reviewer reported that `verify` therefore performs the same TypeScript compilation twice.
+
+6. `.harness/record-evidence.mjs.save:1` — cleanup.
+   - The reviewer reported that an editor backup file remains untracked.
+
+Review disposition
+- Fresh-context review produced actionable findings.
+- No fixes have yet been made in response to these findings.
+- Fresh re-review has therefore not yet occurred.
+- Final verification has not yet been performed after review findings.
+- Step 33 remains incomplete.
+
+Finding dispositions and remediation
+
+1. Secret detection regex — FIXED.
+   - Confirmed the single-quoted credential form was not detected.
+   - Updated .agents/hooks/check-secrets.sh to match both double-quoted and single-quoted credential-like values.
+   - Added a regression test for a single-quoted credential-like value.
+   - Focused secrets tests pass: 3/3.
+
+2. Destructive-command Claude hook registration — FIXED.
+   - Confirmed .claude/settings.json did not initially register the Bash matcher.
+   - Added a Bash PreToolUse matcher invoking .claude/hooks/guard-destructive-command.sh.
+   - Direct Claude-style destructive-command payload test blocks with exit code 2.
+
+3. Pre-commit UI check — FIXED.
+   - Confirmed the documented UI check was missing from .agents/hooks/pre-commit.sh.
+   - Added the .agents/hooks/check-ui-change.sh invocation.
+   - Direct no-staged and temporary staged UI-change checks completed successfully.
+
+4. Duplicated test helper — FIXED.
+   - Consolidated createGitTestRepo into tests/harness/helpers/git-test-repo.ts.
+   - Refactored the three affected test files to import the shared helper.
+   - Repository search confirms a single helper definition remains.
+   - Focused harness tests pass: database 3/3, experiment 3/3, secrets 3/3.
+
+5. Duplicate TypeScript verification — FIXED.
+   - Confirmed the repository has no production build yet; build and typecheck both used tsc --noEmit.
+   - Removed the duplicate build invocation from package.json verify.
+   - Current verify runs lint, typecheck, and test.
+   - Full pnpm verify passes: lint PASS, typecheck PASS, tests 9/9 PASS.
+
+6. Editor backup file — FIXED.
+   - Removed .harness/record-evidence.mjs.save.
+   - Backup removal verified.
+
+Additional fresh-context re-review
+
+- A separate fresh Code Reviewer context performed a re-review after the above fixes.
+- Six new findings were reported.
+- Finding 1 (Claude approval environment): investigated with actual Claude Code 2.1.274 runtime tests.
+  - Without EXPERIMENT_CHANGE_APPROVED=true, an attempted Write to docs/experiment/* was blocked by the PreToolUse experiment-change hook with exit code 2.
+  - With EXPERIMENT_CHANGE_APPROVED=true supplied to the Claude process, the same protected-path Write was allowed by the hook with exit code 0 and the test file was created.
+  - This demonstrates that the documented approval escape hatch is operational.
+  - Test artifact was subsequently removed.
+  - Disposition: not a defect.
+
+- Finding 2 (policy duplication between Claude adapters and canonical Git hooks): investigated by comparing actual behavior.
+  - The Claude adapters operate on individual Edit/Write targets, while the canonical .agents/hooks controls operate on staged Git state.
+  - Direct comparison showed aligned protected-path classification for database/schema paths and ordinary paths.
+  - No shared policy utility currently exists.
+  - Disposition: accepted architectural duplication / maintainability suggestion; no speculative refactor introduced.
+
+- Finding 3 (security documentation cross-reference): FIXED.
+  - Corrected docs/security/AGENT-PERMISSIONS.md to reference harness-level verification rather than claiming a dedicated security-specific test section that does not exist.
+
+- Finding 4 (/review command documentation): FIXED.
+  - Corrected .agents/commands/README.md so skills and specialist agents are distinguished accurately.
+
+- Finding 5 (.gitignore): REJECTED as a non-defect.
+  - .harness/evidence/*.json files are deliberate audit evidence artifacts produced by .harness/record-evidence.mjs.
+  - Step 32 evidence references specific JSON evidence files.
+  - They are therefore retained rather than ignored.
+
+- Finding 6 (future amendment history): FIXED.
+  - Removed unsupported future-dated amendment history from docs/experiment/successful-day-definition.md.
+  - Current threshold remains aligned with docs/experiment/EXPERIMENT.md §7.
+  - Future amendments must be recorded when they actually occur.
+
+Final Step 33 status
+
+- Initial fresh-context review: COMPLETE.
+- Findings investigated: COMPLETE.
+- Required fixes: COMPLETE.
+- Fresh re-review after fixes: COMPLETE.
+- Final verification after review: COMPLETE — node .harness/verify.mjs PASS.
+- Final repository integrity checks: COMPLETE — git diff --check and git diff --cached --check PASS.
+- Step 33 ACCEPTANCE: PASS.

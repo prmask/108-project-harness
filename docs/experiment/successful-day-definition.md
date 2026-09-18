@@ -29,7 +29,7 @@ sources of truth.
 
 ## Definition v3
 
-- **Effective:** Day 47 – present
+- **Effective:** Day 47 – Day 108
 - **Rule:** A day is successful if at least 8 of the 13 protocol items are completed.
 - **Status:** Current.
 

@@ -9,7 +9,7 @@ Identify code smell
 → Tests/baseline
 → Refactor
 → Tests
-→ Review
+→ Fresh-context review
 → Verification
 
 ## Steps
@@ -20,7 +20,7 @@ Identify code smell
 4. Ensure adequate test coverage before changing structure.
 5. Make small, coherent changes.
 6. Run tests after each meaningful step.
-7. Review for accidental product or experiment changes.
+7. Review the change with fresh context for significant changes; trivial changes may omit fresh-context review when no meaningful risk exists.
 8. Run typecheck, lint, build, and relevant E2E tests.
 9. Update architecture documentation if boundaries actually changed.
 

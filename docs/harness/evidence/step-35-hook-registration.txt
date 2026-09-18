@@ -1,0 +1,57 @@
+Step 35 — Rerun Step 7: Hook Registration, Pre-commit, and Automatic Execution
+
+Date: 2026-09-18
+
+Objective
+- Re-run the required hook verification for registration, pre-commit execution, and automatic execution.
+
+1. Hook registration — PASS
+- git config core.hooksPath: .githooks
+- .githooks/pre-commit exists and is executable.
+- .githooks/pre-commit delegates to .agents/hooks/pre-commit.sh.
+- .agents/hooks/pre-commit.sh exists and is executable.
+- Canonical pre-commit chain invokes:
+  - check-secrets.sh
+  - check-database-change.sh
+  - check-experiment-change.sh
+  - check-ui-change.sh
+  - pnpm typecheck
+  - pnpm test
+
+2. Pre-commit execution — PASS
+- Direct execution of .agents/hooks/pre-commit.sh completed successfully.
+- Secret scan: PASS.
+- Database change check: PASS.
+- Experiment change check: PASS.
+- TypeScript typecheck: PASS.
+- Vitest: 3 test files passed, 9 tests passed.
+- Pre-commit exit code: 0.
+- Output: Pre-commit checks passed.
+
+3. Automatic execution — PASS
+- Created a temporary harmless test file and staged it.
+- Executed a normal git commit.
+- The configured Git pre-commit chain executed automatically.
+- Secret scan: PASS.
+- Database change check: PASS.
+- Experiment change check: PASS.
+- TypeScript typecheck: PASS.
+- Vitest: 3 test files passed, 9 tests passed.
+- Pre-commit checks passed.
+- Commit was initially created successfully as 350d382.
+- The temporary test commit was subsequently removed with git reset --soft HEAD~1.
+- The temporary test file was removed.
+- No existing remediation changes were discarded.
+
+Final repository integrity
+- HEAD restored to cdeccaf (Phase 1 step 14).
+- No files staged after cleanup.
+- git diff --check: PASS.
+- git diff --cached --check: PASS.
+
+Scope
+- This verification establishes that the configured Git pre-commit hook is registered, executes successfully, and executes automatically during git commit.
+- The automatic test used a temporary harmless file and did not alter the final repository state.
+
+Result
+- STEP 35: PASS

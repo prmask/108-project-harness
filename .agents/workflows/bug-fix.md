@@ -10,8 +10,8 @@ Bug report
 → Regression test
 → Fix
 → Targeted tests
-→ Full verification
 → Fresh-context review
+→ Full verification
 → Documentation if needed
 
 ## Steps
@@ -23,8 +23,8 @@ Bug report
 5. Add a regression test when technically practical.
 6. Implement the smallest correct fix.
 7. Run targeted tests.
-8. Run broader tests, typecheck, lint, and build as appropriate.
-9. Review the change.
+8. Review the change with fresh context for significant changes; trivial changes may omit fresh-context review when no meaningful risk exists.
+9. Run broader tests, typecheck, lint, and build as appropriate.
 10. Verify that no historical data was modified incorrectly.
 11. Document the root cause when useful.
 

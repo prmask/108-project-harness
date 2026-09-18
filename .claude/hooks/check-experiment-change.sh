@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel)}"
+
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "BLOCKED: experiment-change adapter requires python3." >&2
+  exit 2
+fi
+
+FILE_PATH="$(
+  python3 -c '
+import json
+import sys
+
+try:
+    payload = json.load(sys.stdin)
+    file_path = payload.get("tool_input", {}).get("file_path", "")
+except Exception:
+    file_path = ""
+
+if file_path:
+    print(file_path)
+'
+)"
+
+if [[ -z "$FILE_PATH" ]]; then
+  echo "BLOCKED: unable to determine the file being changed." >&2
+  exit 2
+fi
+
+# Convert an absolute repository path to a repository-relative path.
+if [[ "$FILE_PATH" == "$ROOT/"* ]]; then
+  FILE_PATH="${FILE_PATH#"$ROOT"/}"
+fi
+
+# Step 30 protected scope: exactly docs/experiment/*
+case "$FILE_PATH" in
+  docs/experiment/*)
+    ;;
+  *)
+    exit 0
+    ;;
+esac
+
+echo "EXPERIMENT CHANGE DETECTED" >&2
+echo "Affected file: $FILE_PATH" >&2
+echo "Protected scope: docs/experiment/*" >&2
+echo "An explicit experiment amendment/approval is required." >&2
+
+if [[ "${EXPERIMENT_CHANGE_APPROVED:-false}" != "true" ]]; then
+  echo "BLOCKED: explicit experiment-change approval is required." >&2
+  echo "Required: assess impact, obtain user authorization, version the amendment, and set EXPERIMENT_CHANGE_APPROVED=true for the approved operation." >&2
+  exit 2
+fi
+
+echo "Experiment change explicitly approved." >&2
+exit 0

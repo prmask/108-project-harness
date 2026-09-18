@@ -13,6 +13,7 @@ Requested change
 → Record amendment
 → UX/Architecture/Implementation as needed
 → Tests
+→ Fresh-context Code Review
 → Historical verification
 → Documentation
 
@@ -29,8 +30,9 @@ Requested change
 9. Version the new definition and record date, reason, and authorization.
 10. Implement the change.
 11. Add/update tests.
-12. Verify historical results remain governed by their original definitions.
-13. Update experiment documentation and relevant UI/analytics.
+12. Code Reviewer reviews the significant change from fresh context; do not rely on the implementation context as evidence.
+13. Verify historical results remain governed by their original definitions.
+14. Update experiment documentation and relevant UI/analytics.
 
 ## Non-negotiable Rules
 - Never silently change the experiment.

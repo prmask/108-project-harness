@@ -672,15 +672,19 @@ Any authorized change must be recorded as an experiment amendment.
 
 ## 20. Authority
 
-This document is the authoritative source for the 108-Day Experiment
-definition.
+This document is the authoritative source for the experiment's overall
+purpose, hypotheses, dates, protocol, and experiment-level rules.
 
-Where application behavior conflicts with this document, the application
-is considered incorrect unless an explicit, recorded experiment
-amendment has changed the relevant rule.
+The versioned successful-day scoring rule is maintained separately in
+`docs/experiment/successful-day-definition.md`, which is authoritative
+for successful-day definitions, historical scoring, and amendments to
+that scoring rule.
 
-The experiment constitution is separate from AI memory, prompts, agent
-assumptions, or UI behavior.
+Experiment-level and protocol amendments remain governed by this
+document and the experiment-change/amendment workflow.
+
+The two documents therefore have explicitly scoped authority. Neither
+document silently overrides the other within the other's defined scope.
 
 ------------------------------------------------------------------------
 

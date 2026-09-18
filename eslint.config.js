@@ -1,0 +1,19 @@
+import eslint from '@eslint/js';
+import tseslint from 'typescript-eslint';
+
+export default tseslint.config(
+  {
+    ignores: ['node_modules/**', 'dist/**', 'coverage/**'],
+  },
+  eslint.configs.recommended,
+  {
+    files: ['.harness/**/*.mjs'],
+    languageOptions: {
+      globals: {
+        process: 'readonly',
+        console: 'readonly',
+      },
+    },
+  },
+  ...tseslint.configs.recommended,
+);

@@ -11,7 +11,7 @@ Change request
 → Security review
 → Implementation
 → Security tests
-→ Fresh-context review
+→ Fresh-context Code Review
 → Verification
 
 ## Steps
@@ -22,7 +22,7 @@ Change request
 4. Implement the smallest required change.
 5. Test authentication/authorization, input handling, secrets, and exposure as applicable.
 6. Run the Security Reviewer.
-7. Run Code Reviewer.
+7. Run Code Reviewer from fresh context for the significant security change; do not rely on the implementation context as evidence.
 8. Run normal verification.
 9. Document security decisions and residual risk.
 

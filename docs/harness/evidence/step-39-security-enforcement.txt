@@ -1,0 +1,76 @@
+# Step 39 — Security Enforcement Verification Evidence
+
+Date: 2026-09-18
+Branch: remediation/enforcement-phase-1
+Commit under test: cdeccafefbd983a9fb384e1f065b5680ad4eba0d
+
+## Required controls
+
+### 1. Secret protection
+Runtime test used a temporary fake credential-like value in a staged file.
+Expected: secret scanner blocks the staged content.
+Result: BLOCKED by secret scanner; test cleanup completed.
+Status: PASS
+
+### 2. Destructive commands
+Safe command was allowed.
+Destructive `rm -rf` command was blocked with exit code 1.
+No destructive operation was performed.
+Status: PASS
+
+### 3. Permissions
+Claude Code `.claude/settings.json` registers:
+- Edit|Write -> experiment protection and database protection
+- Bash -> destructive-command protection
+
+Runtime adapter tests confirmed:
+- protected experiment file -> blocked
+- protected database file -> blocked
+- ordinary source file -> allowed
+- safe Bash command -> allowed
+- destructive Bash command -> blocked
+
+Status: PASS
+
+### 4. Experiment protection
+Runtime staged-change test confirmed:
+- ordinary staged change -> allowed, exit 0
+- `docs/experiment/*` change without approval -> blocked, exit 1
+Temporary test file was removed and staging cleaned.
+Status: PASS
+
+### 5. Database protection
+Runtime staged-change test confirmed:
+- ordinary staged change -> allowed, exit 0
+- `db/migrations/*` change without verification -> blocked, exit 1
+Temporary test migration was removed and staging cleaned.
+Status: PASS
+
+## Complete pre-commit gate
+
+Registered hook path:
+.githooks
+
+Runtime execution:
+.githooks/pre-commit
+
+Observed:
+- Secret scan: nothing to scan
+- Database change check: no staged files
+- Experiment change check: no staged files
+- Typecheck: PASS
+- Vitest: 3 test files passed, 9 tests passed
+- Pre-commit checks passed
+- Exit code: 0
+
+Complete security gate: PASS
+
+## Final Step 39 status
+
+Secret protection: PASS
+Destructive commands: PASS
+Permissions: PASS
+Experiment protection: PASS
+DB protection: PASS
+
+STEP 39: PASS

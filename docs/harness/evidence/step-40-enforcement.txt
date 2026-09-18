@@ -1,0 +1,66 @@
+=== STEP 40 — RERUN STEP 15 ENFORCEMENT EVIDENCE ===
+Date: 2026-09-18
+Branch: remediation/enforcement-phase-1
+
+CONTROL 1 — SECRET DETECTION
+Before: Secret detection existed but required fresh runtime confirmation.
+Change: Existing secret-detection hook and automated tests retained.
+Test: Staged fake credential-like value in isolated runtime test.
+Expected: Secret detection blocks the staged secret.
+Actual: Secret detection blocked the staged credential-like value.
+Exit code: 1 (blocked as expected)
+Status: PASS
+
+CONTROL 2 — DESTRUCTIVE COMMAND GUARD
+Before: Destructive-command guard required fresh runtime confirmation.
+Change: Existing destructive-command guard retained.
+Test: Safe command and destructive rm -rf command executed.
+Expected: Safe command allowed; destructive command blocked.
+Actual: Safe command exited 0; destructive command was blocked with exit 1.
+Exit code: 0 / 1
+Status: PASS
+
+CONTROL 3 — EXPERIMENT-CHANGE ENFORCEMENT
+Before: Experiment-change protection required fresh runtime confirmation.
+Change: Existing experiment-change hook retained.
+Test: Ordinary staged change and temporary docs/experiment change tested.
+Expected: Ordinary change allowed; experiment change blocked without approval.
+Actual: Ordinary change allowed; experiment change blocked without approval.
+Exit code: 0 / 1
+Status: PASS
+
+CONTROL 4 — DATABASE-CHANGE ENFORCEMENT
+Before: Database-change protection required fresh runtime confirmation.
+Change: Existing database-change hook retained.
+Test: Ordinary staged change and temporary migration tested.
+Expected: Ordinary change allowed; migration blocked without verification.
+Actual: Ordinary change allowed; migration blocked without verification.
+Exit code: 0 / 1
+Status: PASS
+
+CONTROL 5 — MISSING-TEST ENFORCEMENT
+Before: No executable missing-test enforcement existed.
+Change: Added .agents/hooks/check-missing-tests.sh and registered it in .agents/hooks/pre-commit.sh.
+Tests: Automated Vitest coverage added in tests/harness/missing-tests.test.ts.
+Expected: Implementation change without test is blocked; implementation with test is allowed; explicit approval is allowed.
+Actual: Direct runtime test blocked implementation without test; registered pre-commit also blocked implementation without test. Automated tests passed all 4 cases.
+Exit code: 1 for blocked cases; 0 for allowed cases.
+Status: PASS
+
+CONTROL 6 — FALSE-VERIFICATION PREVENTION
+Before: Independent verifier existed but required fresh failure-path confirmation.
+Change: No implementation change required; fresh failure-path runtime test performed.
+Test: Temporarily changed pnpm verify to exit 23, then ran node .harness/verify.mjs.
+Expected: Independent verifier must return the actual non-zero exit code and report FAIL.
+Actual: Verifier returned exit 23 and reported "INDEPENDENT VERIFICATION: FAIL (exit 23)". package.json was restored and pnpm verify subsequently passed.
+Exit code: 23 for forced failure; 0 after restoration.
+Status: PASS
+
+FINAL VERIFICATION
+Command: pnpm verify
+Expected: lint, typecheck and tests pass.
+Actual: ESLint passed; TypeScript passed; 4 test files and 13 tests passed.
+Exit code: 0
+Status: PASS
+
+STEP 40 RESULT: PASS

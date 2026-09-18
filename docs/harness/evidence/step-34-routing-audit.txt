@@ -1,0 +1,45 @@
+Step 34 — Rerun Step 6: Command, Memory, Test, and Review Routing Audit
+
+Date: 2026-09-18
+
+Objective
+- Re-run the required routing audit for commands, memory, test routing, and review routing.
+
+Verification
+
+1. Command routing — PASS
+- .agents/commands/README.md defines the command layer as thin user-facing shims.
+- Commands delegate to documented workflows rather than duplicating workflow logic.
+- Command-to-workflow mappings are explicitly documented.
+- Invocation contract requires workflows, authoritative documents, skills, specialist delegation where applicable, actual execution, and actual verification reporting.
+
+2. Memory routing — PASS
+- /memory routes to the .agents/memory/ architecture.
+- Memory structure is explicitly defined.
+- Memory is classified as context, not authority.
+- The documented authority hierarchy places experiment specifications and other authoritative documentation above project memory.
+- Memory must not be used to justify changing the experiment specification.
+
+3. Test routing — PASS
+- /test routes to .agents/workflows/new-feature.md.
+- tdd and e2e-testing skills are explicitly referenced.
+- The command requires identification of the owning workflow.
+- Testing proceeds from narrow relevant tests to broader verification where required.
+- UI and experiment-facing verification requirements are explicitly documented.
+- Actual test results must be reported; unexecuted tests must not be claimed as passed.
+
+4. Review routing — PASS
+- /review routes through the documented review workflow.
+- Code Reviewer is always required.
+- Data Integrity and Experiment Scientist are conditionally required for experiment changes.
+- Security Reviewer is conditionally required for security-sensitive changes.
+- UX/UI review is required when UI/UX changes.
+- Specialist reviewers unrelated to the change must not be invoked.
+- The command requires concrete findings and reporting of required versus actually executed reviewers.
+
+Scope
+- This Step 34 verification confirms repository command/routing configuration.
+- It does not claim execution of the full behavioral Test A, Test B, or Test C scenarios from HARNESS-VERIFICATION.md.
+
+Result
+- STEP 34: PASS

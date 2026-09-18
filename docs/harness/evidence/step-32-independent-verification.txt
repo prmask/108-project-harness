@@ -1,0 +1,50 @@
+Step 32 — Build independent verify
+
+Date: 2026-09-17
+
+Implementation
+- Added .harness/verify.mjs.
+- The verifier executes .harness/record-evidence.mjs with `pnpm verify`.
+- The verifier propagates the actual verification exit code.
+- It reports `INDEPENDENT VERIFICATION: PASS` only when the executed verification exits 0.
+- It reports `INDEPENDENT VERIFICATION: FAIL` and propagates the non-zero exit code when verification fails.
+- Existing `pnpm verify` was not changed.
+
+Independent verification — successful repository state
+- Command: node .harness/verify.mjs
+- pnpm lint: PASS.
+- pnpm typecheck: PASS.
+- pnpm test: PASS — 3 test files, 8 tests.
+- pnpm build: PASS.
+- Independent verifier result: PASS.
+- Exit code: 0.
+- Evidence: .harness/evidence/2026-09-17T17-34-04-058Z.json
+
+Failure-path verification
+- Temporarily changed package.json `verify` script to `node -e "process.exit(7)"`.
+- Command: node .harness/verify.mjs
+- Underlying pnpm verify exit code: 7.
+- Independent verifier exit code: 7.
+- Independent verifier result: FAIL.
+- Evidence: .harness/evidence/2026-09-17T17-32-18-488Z.json
+- Original package.json was restored immediately after the controlled test.
+
+Quality verification after restoration
+- pnpm verify: PASS.
+- ESLint: PASS.
+- TypeScript typecheck: PASS.
+- Vitest: 3 test files passed, 8 tests passed.
+- Build: PASS.
+- git diff --check: PASS.
+- git diff --cached --check: PASS.
+- No files are staged.
+
+Evidence contract
+- Verification evidence records contain timestamp, commit, command, exitCode, and result.
+- PASS/FAIL is derived from actual command execution exit status.
+- The verifier does not trust an agent's textual claim or a pre-existing PASS record.
+
+Scope
+- This verifier independently executes the existing local quality gate.
+- It does not by itself execute the full behavioral Test A, Test B, and Test C scenarios from HARNESS-VERIFICATION.md.
+- Full harness behavioral readiness still requires those defined tests to be run through the actual AI coding agent.

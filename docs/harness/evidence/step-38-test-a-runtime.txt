@@ -1,0 +1,45 @@
+# Step 38 — Test A Runtime Evidence
+
+Date: 2026-09-18
+AI coding environment: Claude Code 2.1.274
+Authentication path: Claude.ai login; ANTHROPIC_API_KEY temporarily unset for the Test A invocation only.
+
+## Exact Test A prompt
+
+> Add a simple settings field.
+
+No workflow, command, skill, agent, test strategy, or documentation instructions were supplied.
+
+## Runtime result
+
+The first invocation with the configured ANTHROPIC_API_KEY did not execute the scenario because API-key authentication took precedence over the Claude.ai login.
+
+The affected environment was retried with:
+
+    env -u ANTHROPIC_API_KEY claude -p 'Add a simple settings field.'
+
+Claude Code then executed successfully and returned exit code 0.
+
+Claude identified the request as ambiguous and asked what kind of settings field was intended, including what it should contain.
+
+## Context validation
+
+A separate diagnostic invocation confirmed that Claude Code discovers the repository's AGENTS.md, .agents/, .claude/, product, experiment, architecture, security, and decision documentation.
+
+A further diagnostic invocation, after reading AGENTS.md and the product specification, confirmed that the request cannot be implemented without inventing a product requirement.
+
+AGENTS.md §4.2 requires clarification when ambiguity materially affects architecture, behavior, data integrity, or the experiment.
+
+PRODUCT.md does not define a settings/configuration area or a specific settings field.
+
+## Assessment
+
+Test A was not completed through implementation, testing, verification, and review because the supplied prompt is materially underspecified in the current pre-application repository.
+
+This behavior is consistent with the project's requirement not to invent product requirements.
+
+No harness defect was established by this run.
+
+Test A status: INCOMPLETE — insufficient scenario specification to exercise the full implementation path.
+
+No harness change was made as a result of this run.

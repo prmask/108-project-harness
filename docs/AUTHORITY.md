@@ -63,6 +63,36 @@ Experiment rules must not be silently changed by product, architecture, UX, skil
 
 Historical experiment results must remain protected.
 
+### Experiment-document authority is scoped
+
+The experiment specification is composed of documents with explicitly
+defined responsibilities. Authority within the experiment domain is
+determined by scope, not by filename or by a generic claim that one
+document is authoritative for everything.
+
+The following responsibilities are authoritative:
+
+| Responsibility                                                                      | Authoritative document                         |
+| ----------------------------------------------------------------------------------- | ---------------------------------------------- |
+| Experiment purpose, hypotheses, dates, overall protocol, and experiment-level rules | `docs/experiment/EXPERIMENT.md`                |
+| Canonical 13 daily protocol conditions                                              | `docs/experiment/EXPERIMENT.md`                |
+| Successful-day definition and version history                                       | `docs/experiment/successful-day-definition.md` |
+| Historical successful-day scoring                                                   | `docs/experiment/successful-day-definition.md` |
+| Amendments to the successful-day definition                                         | `docs/experiment/successful-day-definition.md` |
+| Other experiment/protocol amendments                                                | `docs/experiment/EXPERIMENT.md`                |
+
+`docs/experiment/EXPERIMENT.md` does not override the versioned
+successful-day definitions maintained in
+`docs/experiment/successful-day-definition.md`.
+
+`docs/experiment/successful-day-definition.md` does not override the
+experiment protocol, hypotheses, dates, or other experiment-level
+requirements defined by `docs/experiment/EXPERIMENT.md`.
+
+Where a change crosses these scopes, the experiment-change/amendment
+workflow must be used. No agent may resolve a cross-scope conflict by
+silently editing either document.
+
 ## 3. Product specification
 
 The product specification defines what the application is intended to do for the user.
