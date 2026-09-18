@@ -7,7 +7,7 @@ import { createGitTestRepo } from './helpers/git-test-repo.js';
 const root = process.cwd();
 const hook = join(root, '.agents/hooks/check-missing-tests.sh');
 
-function runHook(repo: string, env?: NodeJS.ProcessEnv) {
+function runHook(repo: string, env?: Partial<NodeJS.ProcessEnv>) {
   try {
     const output = execFileSync('bash', [hook], {
       cwd: repo,

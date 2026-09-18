@@ -13,7 +13,7 @@ type ProcessError = {
   stderr?: string | Buffer;
 };
 
-function runHook(repo: string, env?: NodeJS.ProcessEnv) {
+function runHook(repo: string, env?: Partial<NodeJS.ProcessEnv>) {
   try {
     const output = execFileSync('bash', [hook], {
       cwd: repo,

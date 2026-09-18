@@ -1,3 +1,5 @@
 node_modules/
 
 .harness/evidence/*.json
+
+.next/
