@@ -16,6 +16,30 @@ describe("Scoring", () => {
     });
   });
 
+  it("calculates a result using the supplied scoring definition", () => {
+    const definition = {
+      version: "v3" as const,
+      effectiveFromDay: 47,
+      effectiveToDay: 108,
+      requiredCompletedCount: 8,
+      expectedCount: 13,
+    };
+
+    const result = calculateDailyResult(
+      47,
+      definition,
+      completed(8),
+    );
+
+    expect(result).toEqual({
+      dayNumber: 47,
+      scoringDefinitionVersion: "v3",
+      completedCount: 8,
+      expectedCount: 13,
+      successful: true,
+    });
+  });
+
   it("uses scoring definition v1 for Day 46", () => {
     expect(getScoringDefinitionForDay(46)).toMatchObject({
       version: "v1",
@@ -39,17 +63,33 @@ describe("Scoring", () => {
   });
 
   it("requires all 13 conditions for success under v1", () => {
-    expect(calculateDailyResult(1, completed(13)).successful).toBe(true);
-    expect(calculateDailyResult(1, completed(12)).successful).toBe(false);
+    const definition = getScoringDefinitionForDay(1);
+
+    expect(
+      calculateDailyResult(1, definition, completed(13)).successful,
+    ).toBe(true);
+
+    expect(
+      calculateDailyResult(1, definition, completed(12)).successful,
+    ).toBe(false);
   });
 
   it("requires at least 8 conditions for success under v3", () => {
-    expect(calculateDailyResult(47, completed(8)).successful).toBe(true);
-    expect(calculateDailyResult(47, completed(7)).successful).toBe(false);
+    const definition = getScoringDefinitionForDay(47);
+
+    expect(
+      calculateDailyResult(47, definition, completed(8)).successful,
+    ).toBe(true);
+
+    expect(
+      calculateDailyResult(47, definition, completed(7)).successful,
+    ).toBe(false);
   });
 
   it("does not count missing observations as completed", () => {
-    const result = calculateDailyResult(47, [
+    const definition = getScoringDefinitionForDay(47);
+
+    const result = calculateDailyResult(47, definition, [
       ...completed(7),
       "missing",
       "not_completed",
@@ -61,12 +101,15 @@ describe("Scoring", () => {
   });
 
   it("records the scoring definition used for the result", () => {
+    const v1 = getScoringDefinitionForDay(1);
+    const v3 = getScoringDefinitionForDay(47);
+
     expect(
-      calculateDailyResult(1, completed(13)).scoringDefinitionVersion,
+      calculateDailyResult(1, v1, completed(13)).scoringDefinitionVersion,
     ).toBe("v1");
 
     expect(
-      calculateDailyResult(47, completed(8)).scoringDefinitionVersion,
+      calculateDailyResult(47, v3, completed(8)).scoringDefinitionVersion,
     ).toBe("v3");
   });
 

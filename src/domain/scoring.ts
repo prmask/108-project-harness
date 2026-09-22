@@ -51,10 +51,9 @@ export type ObservationStatus =
 
 export function calculateDailyResult(
   dayNumber: number,
+  definition: ScoringDefinition,
   observations: readonly ObservationStatus[],
 ): DailyResult {
-  const definition = getScoringDefinitionForDay(dayNumber);
-
   const completedCount = observations.filter(
     (status) => status === "completed",
   ).length;
