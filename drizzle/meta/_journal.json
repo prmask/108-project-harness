@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1790091169800,
+      "tag": "0000_overconfident_liz_osborn",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1790094682722,
+      "tag": "0001_lazy_patriot",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1790096149028,
+      "tag": "0002_known_apocalypse",
+      "breakpoints": true
+    }
+  ]
+}
