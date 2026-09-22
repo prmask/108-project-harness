@@ -18,10 +18,18 @@ function runHook(repo: string, env?: Partial<NodeJS.ProcessEnv>) {
     const output = execFileSync('bash', [hook], {
       cwd: repo,
       encoding: 'utf8',
-      env: {
-        ...process.env,
-        ...env,
-      },
+      env: (() => {
+        const childEnv = {
+          ...process.env,
+          ...env,
+        };
+
+        if (env?.MIGRATION_VERIFIED === undefined) {
+          delete childEnv.MIGRATION_VERIFIED;
+        }
+
+        return childEnv;
+      })(),
       stdio: ['ignore', 'pipe', 'pipe'],
     });
 
@@ -51,7 +59,9 @@ describe('database change hook', () => {
 
       testRepo.git('add', 'normal.txt');
 
-      const result = runHook(testRepo.path);
+      const result = runHook(testRepo.path, {
+        MIGRATION_VERIFIED: undefined,
+      });
 
       expect(result.code).toBe(0);
       expect(result.output).toContain(
@@ -77,7 +87,9 @@ describe('database change hook', () => {
 
       testRepo.git('add', 'db/migrations/001-test.sql');
 
-      const result = runHook(testRepo.path);
+      const result = runHook(testRepo.path, {
+        MIGRATION_VERIFIED: undefined,
+      });
 
       expect(result.code).not.toBe(0);
       expect(result.output).toContain(
