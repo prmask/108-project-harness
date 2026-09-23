@@ -58,4 +58,125 @@ describe("load experiment day", () => {
 
     database.close();
   });
+
+  it("loads a recorded experiment day and calculates its result", () => {
+    const database = createDatabase();
+
+    database
+      .prepare("INSERT INTO experiment (id) VALUES (?)")
+      .run("108-day-experiment");
+
+    database
+      .prepare(`
+        INSERT INTO experiment_day (
+          id,
+          experiment_id,
+          day_number,
+          date
+        )
+        VALUES (?, ?, ?, ?)
+      `)
+      .run(
+        "day-1",
+        "108-day-experiment",
+        1,
+        "2026-09-07",
+      );
+
+    database
+      .prepare(`
+        INSERT INTO scoring_definition (
+          id,
+          experiment_id,
+          version,
+          effective_from_day,
+          effective_to_day,
+          required_completed_count,
+          expected_count
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+      `)
+      .run(
+        "scoring-v1",
+        "108-day-experiment",
+        "v1",
+        1,
+        46,
+        13,
+        13,
+      );
+
+    database
+      .prepare(`
+        INSERT INTO protocol_observation (
+          id,
+          experiment_day_id,
+          protocol_item_id,
+          status,
+          observed_at
+        )
+        VALUES (?, ?, ?, ?, ?)
+      `)
+      .run(
+        "observation-1",
+        "day-1",
+        "wake-0350",
+        "completed",
+        "2026-09-07T03:50:00Z",
+      );
+
+    database
+      .prepare(`
+        INSERT INTO protocol_observation (
+          id,
+          experiment_day_id,
+          protocol_item_id,
+          status,
+          observed_at
+        )
+        VALUES (?, ?, ?, ?, ?)
+      `)
+      .run(
+        "observation-2",
+        "day-1",
+        "run-0520",
+        "not_completed",
+        "2026-09-07T05:20:00Z",
+      );
+
+    const loaded = loadExperimentDay(
+      database,
+      "108-day-experiment",
+      1,
+    );
+
+    expect(loaded).toEqual({
+      status: "available",
+      result: {
+        experimentDay: {
+          id: "day-1",
+          experimentId: "108-day-experiment",
+          dayNumber: 1,
+          date: "2026-09-07",
+        },
+        scoringDefinition: {
+          version: "v1",
+          effectiveFromDay: 1,
+          effectiveToDay: 46,
+          requiredCompletedCount: 13,
+          expectedCount: 13,
+        },
+        observations: ["completed", "not_completed"],
+        dailyResult: {
+          dayNumber: 1,
+          scoringDefinitionVersion: "v1",
+          completedCount: 1,
+          expectedCount: 13,
+          successful: false,
+        },
+      },
+    });
+
+    database.close();
+  });
 });
