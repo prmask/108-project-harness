@@ -9,9 +9,16 @@ type ScoringDefinitionRow = {
   expected_count: number;
 };
 
+export type ScoringDefinitionRepository = {
+  resolveForDay(
+    experimentId: string,
+    dayNumber: number,
+  ): ScoringDefinition;
+};
+
 export function createScoringDefinitionRepository(
   database: Database.Database,
-) {
+): ScoringDefinitionRepository {
   return {
     resolveForDay(
       experimentId: string,
