@@ -1,45 +1,38 @@
-import { ExperimentDayView } from '../src/components/experiment-day-view.js';
+import { createDatabase } from "../src/data/database.js";
+import { loadExperimentDay } from "../src/application/load-experiment-day.js";
+import { ExperimentDayView } from "../src/components/experiment-day-view.js";
+
+const experimentId = "108-day-experiment";
+const dayNumber = 1;
 
 export default function HomePage() {
-  return (
-    <ExperimentDayView
-      result={{
-        experimentDay: {
-          id: 'demo-day-17',
-          experimentId: '108-day-experiment',
-          dayNumber: 17,
-          date: '2026-09-23',
-        },
-        scoringDefinition: {
-          version: 'v1',
-          effectiveFromDay: 1,
-          effectiveToDay: 46,
-          requiredCompletedCount: 13,
-          expectedCount: 13,
-        },
-        observations: [
-          'completed',
-          'completed',
-          'completed',
-          'completed',
-          'completed',
-          'completed',
-          'completed',
-          'completed',
-          'completed',
-          'completed',
-          'completed',
-          'completed',
-          'completed',
-        ],
-        dailyResult: {
-          dayNumber: 17,
-          scoringDefinitionVersion: 'v1',
-          completedCount: 13,
-          expectedCount: 13,
-          successful: true,
-        },
-      }}
-    />
-  );
+  const database = createDatabase();
+
+  try {
+    const loaded = loadExperimentDay(
+      database,
+      experimentId,
+      dayNumber,
+    );
+
+    if (loaded.status === "unavailable") {
+      return (
+        <main>
+          <header>
+            <p>108-Day Experiment</p>
+            <h1>Experiment day unavailable</h1>
+          </header>
+
+          <section aria-labelledby="unavailable-heading">
+            <h2 id="unavailable-heading">No experiment day available</h2>
+            <p>{loaded.reason}</p>
+          </section>
+        </main>
+      );
+    }
+
+    return <ExperimentDayView result={loaded.result} />;
+  } finally {
+    database.close();
+  }
 }
