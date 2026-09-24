@@ -128,4 +128,52 @@ describe("scoring definition repository", () => {
 
     database.close();
   });
+
+  it("rejects an unknown scoring definition version", () => {
+    const database = new Database(":memory:");
+
+    database.exec(`
+      CREATE TABLE scoring_definition (
+        id TEXT PRIMARY KEY,
+        experiment_id TEXT NOT NULL,
+        version TEXT NOT NULL,
+        effective_from_day INTEGER NOT NULL,
+        effective_to_day INTEGER NOT NULL,
+        required_completed_count INTEGER NOT NULL,
+        expected_count INTEGER NOT NULL,
+        UNIQUE (experiment_id, version)
+      );
+    `);
+
+    const repository = createScoringDefinitionRepository(database);
+
+    database
+      .prepare(`
+        INSERT INTO scoring_definition (
+          id,
+          experiment_id,
+          version,
+          effective_from_day,
+          effective_to_day,
+          required_completed_count,
+          expected_count
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+      `)
+      .run(
+        "scoring-invalid",
+        "experiment-invalid",
+        "v99",
+        1,
+        108,
+        8,
+        13,
+      );
+
+    expect(() =>
+      repository.resolveForDay("experiment-invalid", 1),
+    ).toThrow('Unknown scoring definition version "v99"');
+
+    database.close();
+  });
 });

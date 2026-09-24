@@ -113,6 +113,42 @@ describe("Scoring", () => {
     ).toBe("v3");
   });
 
+  it("preserves the historical scoring definition when the later definition exists", () => {
+    const historicalDefinition = getScoringDefinitionForDay(46);
+    const currentDefinition = getScoringDefinitionForDay(47);
+
+    const historicalResult = calculateDailyResult(
+      46,
+      historicalDefinition,
+      completed(12),
+    );
+
+    const currentResult = calculateDailyResult(
+      47,
+      currentDefinition,
+      completed(8),
+    );
+
+    expect(historicalResult).toEqual({
+      dayNumber: 46,
+      scoringDefinitionVersion: "v1",
+      completedCount: 12,
+      expectedCount: 13,
+      successful: false,
+    });
+
+    expect(currentResult).toEqual({
+      dayNumber: 47,
+      scoringDefinitionVersion: "v3",
+      completedCount: 8,
+      expectedCount: 13,
+      successful: true,
+    });
+
+    expect(historicalResult.scoringDefinitionVersion).toBe("v1");
+    expect(historicalResult.successful).toBe(false);
+  });
+
   it("does not apply v3 retroactively to Days 1–46", () => {
     expect(getScoringDefinitionForDay(46).version).toBe("v1");
   });

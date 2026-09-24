@@ -168,6 +168,11 @@ export const observationCorrection = sqliteTable(
     observationHistoryIndex: index(
       'observation_correction_observation_id_index',
     ).on(table.observationId),
+
+    correctedStatusCheck: check(
+      'observation_correction_corrected_status_check',
+      sql`${table.correctedStatus} IN ('completed', 'not_completed', 'missing')`,
+    ),
   }),
 );
 

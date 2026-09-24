@@ -22,8 +22,8 @@ sources of truth.
 
 ## Definition v2
 
-- **Effective:** Day 47 (2026-09-06) only — superseded the same day, before
-  being applied to score any day.
+- **Effective:** Day 47 (2026-10-23) only — superseded before any Day 47
+  score was recorded.
 - **Rule:** A day is successful if at least 10 of the 13 protocol items are completed.
 - **Status:** Superseded by v3. Never used to score any day.
 
@@ -37,7 +37,7 @@ sources of truth.
 
 | Field | Value |
 |---|---|
-| Amendment date | 2026-09-06 (Day 47) |
+| Amendment date | 2026-09-06 (before Day 1) |
 | Requested by | User |
 | Change | Successful-day threshold changed from "all 13 of 13 protocol items" to "at least 10 of 13 protocol items" |
 | Reason | Not specified by the user at the time of the amendment |
@@ -49,7 +49,7 @@ sources of truth.
 
 | Field | Value |
 |---|---|
-| Amendment date | 2026-09-06 (Day 47, same day as Amendment #1) |
+| Amendment date | 2026-09-06 (before Day 1, same date as Amendment #1) |
 | Requested by | User |
 | Change | Successful-day threshold changed from "at least 10 of 13 protocol items" (v2) to "at least 8 of 13 protocol items" (v3) |
 | Reason | User changed their mind; no further reason specified |

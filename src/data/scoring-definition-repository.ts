@@ -49,8 +49,14 @@ export function createScoringDefinitionRepository(
         );
       }
 
+      if (row.version !== "v1" && row.version !== "v3") {
+        throw new Error(
+          `Unknown scoring definition version "${row.version}"`,
+        );
+      }
+
       return {
-        version: row.version as ScoringDefinition["version"],
+        version: row.version,
         effectiveFromDay: row.effective_from_day,
         effectiveToDay: row.effective_to_day,
         requiredCompletedCount: row.required_completed_count,

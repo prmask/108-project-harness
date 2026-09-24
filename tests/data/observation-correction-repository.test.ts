@@ -10,7 +10,8 @@ function createDatabase() {
       id TEXT PRIMARY KEY,
       observation_id TEXT NOT NULL,
       original_status TEXT NOT NULL,
-      corrected_status TEXT NOT NULL,
+      corrected_status TEXT NOT NULL
+        CHECK (corrected_status IN ('completed', 'not_completed', 'missing')),
       corrected_at TEXT NOT NULL,
       reason TEXT NOT NULL
     );
@@ -109,5 +110,32 @@ describe("observation correction repository", () => {
     const repository = createObservationCorrectionRepository(database);
 
     expect(repository.listForObservation("observation-1")).toEqual([]);
+  });
+
+  it("rejects an invalid corrected status at the database boundary", () => {
+    const database = createDatabase();
+
+    expect(() =>
+      database
+        .prepare(`
+          INSERT INTO observation_correction (
+            id,
+            observation_id,
+            original_status,
+            corrected_status,
+            corrected_at,
+            reason
+          )
+          VALUES (?, ?, ?, ?, ?, ?)
+        `)
+        .run(
+          "correction-invalid",
+          "observation-1",
+          "not_completed",
+          "invalid",
+          "2026-09-23T12:00:00.000Z",
+          "Invalid status should not be persisted.",
+        ),
+    ).toThrow();
   });
 });
