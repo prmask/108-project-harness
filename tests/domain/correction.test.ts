@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
   correctObservation,
+  getEffectiveObservationStatus,
+  type ObservationCorrection,
   type ProtocolObservation,
 } from "../../src/domain/correction.js";
 
@@ -84,5 +86,65 @@ describe("Observation Correction", () => {
 
     expect(original.status).toBe("not_completed");
     expect(result.observation.status).toBe("not_completed");
+  });
+});
+
+describe("Effective Observation Status", () => {
+  it("uses the original status when there are no corrections", () => {
+    expect(getEffectiveObservationStatus(original, [])).toBe("not_completed");
+  });
+
+  it("uses the corrected status when a correction exists", () => {
+    const correction: ObservationCorrection = {
+      id: "correction-1",
+      observationId: "observation-1",
+      originalStatus: "not_completed",
+      correctedStatus: "completed",
+      correctedAt: "2026-09-07T08:00:00.000Z",
+      reason: "Confirmed after reviewing my record.",
+    };
+
+    expect(getEffectiveObservationStatus(original, [correction])).toBe(
+      "completed",
+    );
+
+    expect(original.status).toBe("not_completed");
+  });
+
+  it("uses the latest correction when multiple corrections exist", () => {
+    const firstCorrection: ObservationCorrection = {
+      id: "correction-1",
+      observationId: "observation-1",
+      originalStatus: "not_completed",
+      correctedStatus: "completed",
+      correctedAt: "2026-09-07T08:00:00.000Z",
+      reason: "First correction.",
+    };
+
+    const secondCorrection: ObservationCorrection = {
+      id: "correction-2",
+      observationId: "observation-1",
+      originalStatus: "completed",
+      correctedStatus: "not_completed",
+      correctedAt: "2026-09-07T09:00:00.000Z",
+      reason: "Second correction.",
+    };
+
+    expect(
+      getEffectiveObservationStatus(original, [
+        firstCorrection,
+        secondCorrection,
+      ]),
+    ).toBe("not_completed");
+  });
+
+  it("keeps missing distinct from not_completed", () => {
+    const missing: ProtocolObservation = {
+      ...original,
+      id: "observation-2",
+      status: "missing",
+    };
+
+    expect(getEffectiveObservationStatus(missing, [])).toBe("missing");
   });
 });

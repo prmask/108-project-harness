@@ -67,9 +67,24 @@ describe("protocol observation repository", () => {
     const repository = createProtocolObservationRepository(database);
 
     expect(repository.listForDay("day-1")).toEqual([
-      "completed",
-      "not_completed",
-      "missing",
+      {
+        id: "observation-1",
+        protocolItemId: "wake-0350",
+        status: "completed",
+        observedAt: "2026-09-07T03:50:00Z",
+      },
+      {
+        id: "observation-2",
+        protocolItemId: "run-0520",
+        status: "not_completed",
+        observedAt: "2026-09-07T05:20:00Z",
+      },
+      {
+        id: "observation-3",
+        protocolItemId: "sleep-2200",
+        status: "missing",
+        observedAt: "2026-09-07T22:00:00Z",
+      },
     ]);
 
     database.close();
@@ -79,9 +94,13 @@ describe("protocol observation repository", () => {
     const database = createDatabase();
     const repository = createProtocolObservationRepository(database);
 
-    expect(repository.listForDay("day-1")).toContain("completed");
-    expect(repository.listForDay("day-1")).toContain("not_completed");
-    expect(repository.listForDay("day-1")).toContain("missing");
+    const observations = repository.listForDay("day-1");
+
+    expect(observations.map((observation) => observation.status)).toEqual([
+      "completed",
+      "not_completed",
+      "missing",
+    ]);
 
     database.close();
   });
@@ -99,7 +118,14 @@ describe("protocol observation repository", () => {
     const database = createDatabase();
     const repository = createProtocolObservationRepository(database);
 
-    expect(repository.listForDay("day-2")).toEqual(["completed"]);
+    expect(repository.listForDay("day-2")).toEqual([
+      {
+        id: "observation-4",
+        protocolItemId: "wake-0350",
+        status: "completed",
+        observedAt: "2026-09-08T03:50:00Z",
+      },
+    ]);
 
     database.close();
   });

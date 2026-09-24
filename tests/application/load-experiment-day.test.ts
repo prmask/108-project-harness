@@ -39,6 +39,16 @@ function createDatabase(): Database.Database {
       observed_at TEXT NOT NULL,
       FOREIGN KEY (experiment_day_id) REFERENCES experiment_day(id)
     );
+
+    CREATE TABLE observation_correction (
+      id TEXT PRIMARY KEY,
+      observation_id TEXT NOT NULL,
+      original_status TEXT NOT NULL,
+      corrected_status TEXT NOT NULL,
+      corrected_at TEXT NOT NULL,
+      reason TEXT NOT NULL,
+      FOREIGN KEY (observation_id) REFERENCES protocol_observation(id)
+    );
   `);
 
   return database;

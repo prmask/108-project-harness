@@ -45,3 +45,12 @@ export function correctObservation(
     },
   };
 }
+
+export function getEffectiveObservationStatus(
+  observation: ProtocolObservation,
+  corrections: readonly ObservationCorrection[],
+): ObservationStatus {
+  const latestCorrection = corrections.at(-1);
+
+  return latestCorrection?.correctedStatus ?? observation.status;
+}
