@@ -39,6 +39,22 @@ export function ExperimentDayView({
           </ul>
         )}
       </section>
+
+      <section aria-labelledby="three-six-nine-heading">
+        <h2 id="three-six-nine-heading">3-6-9 Goal Practice</h2>
+
+        <ul>
+          {presentation.threeSixNine.sessions.map((session) => (
+            <li key={session.period}>
+              <strong>{session.periodLabel}</strong>{" "}
+              {session.completedRepetitions} / {session.plannedRepetitions}{" "}
+              repetitions — {session.statusLabel}
+            </li>
+          ))}
+        </ul>
+
+        <p>Total: {presentation.threeSixNine.summary}</p>
+      </section>
     </main>
   );
 }

@@ -38,6 +38,44 @@ export const experimentDay = sqliteTable(
   }),
 );
 
+export const threeSixNineSession = sqliteTable(
+  'three_six_nine_session',
+  {
+    id: text('id').primaryKey(),
+    experimentDayId: text('experiment_day_id')
+      .notNull()
+      .references(() => experimentDay.id),
+    period: text('period').notNull(),
+    plannedRepetitions: integer('planned_repetitions').notNull(),
+    completedRepetitions: integer('completed_repetitions').notNull(),
+    status: text('status').notNull(),
+    completedAt: text('completed_at'),
+  },
+  (table) => [
+    unique('three_six_nine_session_day_period_unique').on(
+      table.experimentDayId,
+      table.period,
+    ),
+    check(
+      'three_six_nine_session_period_check',
+      sql`period IN ('morning', 'afternoon', 'evening')`,
+    ),
+    check(
+      'three_six_nine_session_status_check',
+      sql`status IN ('completed', 'not_completed', 'missing')`,
+    ),
+    check(
+      'three_six_nine_session_planned_repetitions_check',
+      sql`planned_repetitions IN (3, 6, 9)`,
+    ),
+    check(
+      'three_six_nine_session_completed_repetitions_check',
+      sql`completed_repetitions >= 0
+          AND completed_repetitions <= planned_repetitions`,
+    ),
+  ],
+);
+
 export const protocolDefinition = sqliteTable(
   'protocol_definition',
   {

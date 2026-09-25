@@ -5,6 +5,7 @@ import { createProtocolObservationRepository } from "../../src/data/protocol-obs
 import { createObservationCorrectionRepository } from "../../src/data/observation-correction-repository.js";
 import { createScoringDefinitionRepository } from "../../src/data/scoring-definition-repository.js";
 import { getExperimentDay } from "../../src/application/get-experiment-day.js";
+import { createThreeSixNineSessionRepository } from "../../src/data/three-six-nine-session-repository.js";
 
 function createTestDatabase() {
   const database = new Database(":memory:");
@@ -53,6 +54,16 @@ function createTestDatabase() {
       corrected_at TEXT NOT NULL,
       reason TEXT NOT NULL,
       FOREIGN KEY (observation_id) REFERENCES protocol_observation(id)
+    );
+
+    CREATE TABLE three_six_nine_session (
+      id TEXT PRIMARY KEY,
+      experiment_day_id TEXT NOT NULL,
+      period TEXT NOT NULL,
+      planned_repetitions INTEGER NOT NULL,
+      completed_repetitions INTEGER NOT NULL,
+      status TEXT NOT NULL,
+      completed_at TEXT
     );
   `);
 
@@ -123,6 +134,75 @@ function createTestDatabase() {
       "2026-09-07T05:20:00Z",
     );
 
+  database
+    .prepare(`
+      INSERT INTO three_six_nine_session (
+        id,
+        experiment_day_id,
+        period,
+        planned_repetitions,
+        completed_repetitions,
+        status,
+        completed_at
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+    `)
+    .run(
+      "session-morning",
+      "day-1",
+      "morning",
+      3,
+      3,
+      "completed",
+      "2026-09-07T06:00:00Z",
+    );
+
+  database
+    .prepare(`
+      INSERT INTO three_six_nine_session (
+        id,
+        experiment_day_id,
+        period,
+        planned_repetitions,
+        completed_repetitions,
+        status,
+        completed_at
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+    `)
+    .run(
+      "session-afternoon",
+      "day-1",
+      "afternoon",
+      6,
+      4,
+      "not_completed",
+      null,
+    );
+
+  database
+    .prepare(`
+      INSERT INTO three_six_nine_session (
+        id,
+        experiment_day_id,
+        period,
+        planned_repetitions,
+        completed_repetitions,
+        status,
+        completed_at
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+    `)
+    .run(
+      "session-evening",
+      "day-1",
+      "evening",
+      9,
+      0,
+      "missing",
+      null,
+    );
+
   return database;
 }
 
@@ -136,6 +216,8 @@ function createApplicationInput(database: Database.Database, dayNumber = 1) {
       createProtocolObservationRepository(database),
     observationCorrectionRepository:
       createObservationCorrectionRepository(database),
+    threeSixNineSessionRepository:
+      createThreeSixNineSessionRepository(database),
   };
 }
 

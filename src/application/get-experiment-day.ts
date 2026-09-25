@@ -3,6 +3,10 @@ import type { ProtocolObservationRepository } from "../data/protocol-observation
 import type { ObservationCorrectionRepository } from "../data/observation-correction-repository.js";
 import type { ScoringDefinition } from "../domain/scoring.js";
 import type { ScoringDefinitionRepository } from "../data/scoring-definition-repository.js";
+import type {
+  ThreeSixNineSessionRecord,
+  ThreeSixNineSessionRepository,
+} from "../data/three-six-nine-session-repository.js";
 import {
   calculateDailyResult,
   type DailyResult,
@@ -19,6 +23,7 @@ export type GetExperimentDayResult = {
   scoringDefinition: ScoringDefinition;
   observations: readonly ObservationStatus[];
   dailyResult: DailyResult;
+  threeSixNineSessions: readonly ThreeSixNineSessionRecord[];
 };
 
 type GetExperimentDayDependencies = {
@@ -26,6 +31,7 @@ type GetExperimentDayDependencies = {
   scoringDefinitionRepository: ScoringDefinitionRepository;
   protocolObservationRepository: ProtocolObservationRepository;
   observationCorrectionRepository: ObservationCorrectionRepository;
+  threeSixNineSessionRepository: ThreeSixNineSessionRepository;
 };
 
 type GetExperimentDayInput = GetExperimentDayDependencies & {
@@ -40,11 +46,17 @@ export function getExperimentDay({
   scoringDefinitionRepository,
   protocolObservationRepository,
   observationCorrectionRepository,
+  threeSixNineSessionRepository,
 }: GetExperimentDayInput): GetExperimentDayResult {
   const experimentDay = experimentDayRepository.resolveForDay(
     experimentId,
     dayNumber,
   );
+
+  const threeSixNineSessions =
+    threeSixNineSessionRepository.listForDay(
+      experimentDay.id,
+    );
 
   const scoringDefinition =
     scoringDefinitionRepository.resolveForDay(
@@ -88,5 +100,6 @@ export function getExperimentDay({
     scoringDefinition,
     observations,
     dailyResult,
+    threeSixNineSessions,
   };
 }

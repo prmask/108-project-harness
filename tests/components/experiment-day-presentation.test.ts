@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { presentExperimentDay } from '../../src/components/experiment-day-presentation.js';
 import type { GetExperimentDayResult } from '../../src/application/get-experiment-day.js';
+import { presentExperimentDay } from '../../src/components/experiment-day-presentation.js';
 
 function createResult(
   overrides: Partial<GetExperimentDayResult> = {},
@@ -42,6 +42,7 @@ function createResult(
       successful: true,
     },
     ...overrides,
+    threeSixNineSessions: overrides.threeSixNineSessions ?? [],
   };
 }
 
@@ -53,9 +54,7 @@ describe('presentExperimentDay', () => {
     expect(presentation.date).toBe('2026-09-23');
     expect(presentation.completedSummary).toBe('13 / 13 completed');
     expect(presentation.resultLabel).toBe('Successful day');
-    expect(presentation.scoringDefinitionLabel).toBe(
-      'Scoring definition: v1',
-    );
+    expect(presentation.scoringDefinitionLabel).toBe('Scoring definition: v1');
   });
 
   it('does not invent observations when none are recorded', () => {
@@ -94,5 +93,73 @@ describe('presentExperimentDay', () => {
       'Protocol condition 1: Completed',
       'Protocol condition 2: Missing',
     ]);
+  });
+
+  it('presents the 3-6-9 sessions separately from daily scoring', () => {
+    const presentation = presentExperimentDay(
+      createResult({
+        threeSixNineSessions: [
+          {
+            id: 'session-morning',
+            experimentDayId: 'day-17',
+            period: 'morning',
+            plannedRepetitions: 3,
+            completedRepetitions: 3,
+            status: 'completed',
+            completedAt: '2026-09-23T06:00:00Z',
+          },
+          {
+            id: 'session-afternoon',
+            experimentDayId: 'day-17',
+            period: 'afternoon',
+            plannedRepetitions: 6,
+            completedRepetitions: 4,
+            status: 'not_completed',
+            completedAt: null,
+          },
+          {
+            id: 'session-evening',
+            experimentDayId: 'day-17',
+            period: 'evening',
+            plannedRepetitions: 9,
+            completedRepetitions: 0,
+            status: 'missing',
+            completedAt: null,
+          },
+        ],
+      }),
+    );
+
+    expect(presentation.threeSixNine).toEqual({
+      sessions: [
+        {
+          period: 'morning',
+          periodLabel: 'Morning',
+          plannedRepetitions: 3,
+          completedRepetitions: 3,
+          status: 'completed',
+          statusLabel: 'Completed',
+        },
+        {
+          period: 'afternoon',
+          periodLabel: 'Afternoon',
+          plannedRepetitions: 6,
+          completedRepetitions: 4,
+          status: 'not_completed',
+          statusLabel: 'Not completed',
+        },
+        {
+          period: 'evening',
+          periodLabel: 'Evening',
+          plannedRepetitions: 9,
+          completedRepetitions: 0,
+          status: 'missing',
+          statusLabel: 'Missing',
+        },
+      ],
+      completedRepetitions: 7,
+      plannedRepetitions: 18,
+      summary: '7 / 18 repetitions',
+    });
   });
 });

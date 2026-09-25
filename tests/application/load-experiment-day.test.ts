@@ -49,6 +49,16 @@ function createDatabase(): Database.Database {
       reason TEXT NOT NULL,
       FOREIGN KEY (observation_id) REFERENCES protocol_observation(id)
     );
+
+    CREATE TABLE three_six_nine_session (
+      id TEXT PRIMARY KEY,
+      experiment_day_id TEXT NOT NULL,
+      period TEXT NOT NULL,
+      planned_repetitions INTEGER NOT NULL,
+      completed_repetitions INTEGER NOT NULL,
+      status TEXT NOT NULL,
+      completed_at TEXT
+    );
   `);
 
   return database;
@@ -177,6 +187,7 @@ describe("load experiment day", () => {
           expectedCount: 13,
         },
         observations: ["completed", "not_completed"],
+        threeSixNineSessions: [],
         dailyResult: {
           dayNumber: 1,
           scoringDefinitionVersion: "v1",
