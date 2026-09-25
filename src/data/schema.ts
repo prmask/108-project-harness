@@ -3,6 +3,7 @@ import {
   check,
   index,
   integer,
+  real,
   sqliteTable,
   text,
   unique,
@@ -35,6 +36,27 @@ export const experimentDay = sqliteTable(
     experimentLookupIndex: index('experiment_day_experiment_id_index').on(
       table.experimentId,
     ),
+  }),
+);
+
+export const healthWeightObservation = sqliteTable(
+  'health_weight_observation',
+  {
+    id: text('id').primaryKey(),
+    experimentDayId: text('experiment_day_id')
+      .notNull()
+      .references(() => experimentDay.id),
+    valueKg: real('value_kg').notNull(),
+    observedAt: text('observed_at').notNull(),
+  },
+  (table) => ({
+    experimentDayLookupIndex: index(
+      'health_weight_observation_experiment_day_id_index',
+    ).on(table.experimentDayId),
+
+    observedAtIndex: index(
+      'health_weight_observation_observed_at_index',
+    ).on(table.observedAt),
   }),
 );
 

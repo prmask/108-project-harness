@@ -41,6 +41,7 @@ function createResult(
       expectedCount: 13,
       successful: true,
     },
+    healthWeightObservations: [],
     ...overrides,
     threeSixNineSessions: overrides.threeSixNineSessions ?? [],
   };

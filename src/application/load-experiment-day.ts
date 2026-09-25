@@ -5,6 +5,7 @@ import { createProtocolObservationRepository } from "../data/protocol-observatio
 import { createScoringDefinitionRepository } from "../data/scoring-definition-repository.js";
 import { createObservationCorrectionRepository } from "../data/observation-correction-repository.js";
 import { createThreeSixNineSessionRepository } from "../data/three-six-nine-session-repository.js";
+import { createHealthWeightObservationRepository } from "../data/health-weight-observation-repository.js";
 
 export type LoadExperimentDayResult =
   | {
@@ -33,6 +34,8 @@ export function loadExperimentDay(
         createObservationCorrectionRepository(database),
       threeSixNineSessionRepository:
         createThreeSixNineSessionRepository(database),
+      healthWeightObservationRepository:
+        createHealthWeightObservationRepository(database),
     });
 
     return {

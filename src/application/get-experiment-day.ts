@@ -2,6 +2,10 @@ import type { ExperimentDayRecord } from "../data/experiment-day-repository.js";
 import type { ProtocolObservationRepository } from "../data/protocol-observation-repository.js";
 import type { ObservationCorrectionRepository } from "../data/observation-correction-repository.js";
 import type { ScoringDefinition } from "../domain/scoring.js";
+import type {
+  HealthWeightObservationRecord,
+  HealthWeightObservationRepository,
+} from "../data/health-weight-observation-repository.js";
 import type { ScoringDefinitionRepository } from "../data/scoring-definition-repository.js";
 import type {
   ThreeSixNineSessionRecord,
@@ -24,6 +28,7 @@ export type GetExperimentDayResult = {
   observations: readonly ObservationStatus[];
   dailyResult: DailyResult;
   threeSixNineSessions: readonly ThreeSixNineSessionRecord[];
+  healthWeightObservations: readonly HealthWeightObservationRecord[];
 };
 
 type GetExperimentDayDependencies = {
@@ -32,6 +37,7 @@ type GetExperimentDayDependencies = {
   protocolObservationRepository: ProtocolObservationRepository;
   observationCorrectionRepository: ObservationCorrectionRepository;
   threeSixNineSessionRepository: ThreeSixNineSessionRepository;
+  healthWeightObservationRepository: HealthWeightObservationRepository;
 };
 
 type GetExperimentDayInput = GetExperimentDayDependencies & {
@@ -47,6 +53,7 @@ export function getExperimentDay({
   protocolObservationRepository,
   observationCorrectionRepository,
   threeSixNineSessionRepository,
+  healthWeightObservationRepository,
 }: GetExperimentDayInput): GetExperimentDayResult {
   const experimentDay = experimentDayRepository.resolveForDay(
     experimentId,
@@ -55,6 +62,11 @@ export function getExperimentDay({
 
   const threeSixNineSessions =
     threeSixNineSessionRepository.listForDay(
+      experimentDay.id,
+    );
+
+  const healthWeightObservations =
+    healthWeightObservationRepository.listForDay(
       experimentDay.id,
     );
 
@@ -101,5 +113,6 @@ export function getExperimentDay({
     observations,
     dailyResult,
     threeSixNineSessions,
+    healthWeightObservations,
   };
 }

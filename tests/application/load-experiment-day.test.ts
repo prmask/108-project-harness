@@ -59,6 +59,14 @@ function createDatabase(): Database.Database {
       status TEXT NOT NULL,
       completed_at TEXT
     );
+
+    CREATE TABLE health_weight_observation (
+      id TEXT PRIMARY KEY,
+      experiment_day_id TEXT NOT NULL,
+      value_kg REAL NOT NULL,
+      observed_at TEXT NOT NULL,
+      FOREIGN KEY (experiment_day_id) REFERENCES experiment_day(id)
+    );
   `);
 
   return database;
@@ -187,6 +195,7 @@ describe("load experiment day", () => {
           expectedCount: 13,
         },
         observations: ["completed", "not_completed"],
+        healthWeightObservations: [],
         threeSixNineSessions: [],
         dailyResult: {
           dayNumber: 1,
