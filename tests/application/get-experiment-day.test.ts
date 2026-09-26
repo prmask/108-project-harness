@@ -7,6 +7,7 @@ import { createScoringDefinitionRepository } from "../../src/data/scoring-defini
 import { getExperimentDay } from "../../src/application/get-experiment-day.js";
 import { createThreeSixNineSessionRepository } from "../../src/data/three-six-nine-session-repository.js";
 import { createHealthWeightObservationRepository } from "../../src/data/health-weight-observation-repository.js";
+import { createHealthWaistObservationRepository } from "../../src/data/health-waist-observation-repository.js";
 
 function createTestDatabase() {
   const database = new Database(":memory:");
@@ -65,6 +66,14 @@ function createTestDatabase() {
       completed_repetitions INTEGER NOT NULL,
       status TEXT NOT NULL,
       completed_at TEXT
+    );
+
+    CREATE TABLE health_waist_observation (
+      id TEXT PRIMARY KEY NOT NULL,
+      experiment_day_id TEXT NOT NULL,
+      value_cm REAL NOT NULL,
+      observed_at TEXT NOT NULL,
+      FOREIGN KEY (experiment_day_id) REFERENCES experiment_day(id)
     );
 
     CREATE TABLE health_weight_observation (
@@ -229,6 +238,8 @@ function createApplicationInput(database: Database.Database, dayNumber = 1) {
       createThreeSixNineSessionRepository(database),
     healthWeightObservationRepository:
       createHealthWeightObservationRepository(database),
+    healthWaistObservationRepository:
+      createHealthWaistObservationRepository(database),
   };
 }
 

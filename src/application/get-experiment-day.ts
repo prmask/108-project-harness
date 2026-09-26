@@ -6,6 +6,10 @@ import type {
   HealthWeightObservationRecord,
   HealthWeightObservationRepository,
 } from "../data/health-weight-observation-repository.js";
+import type {
+  HealthWaistObservationRecord,
+  HealthWaistObservationRepository,
+} from "../data/health-waist-observation-repository.js";
 import type { ScoringDefinitionRepository } from "../data/scoring-definition-repository.js";
 import type {
   ThreeSixNineSessionRecord,
@@ -29,6 +33,7 @@ export type GetExperimentDayResult = {
   dailyResult: DailyResult;
   threeSixNineSessions: readonly ThreeSixNineSessionRecord[];
   healthWeightObservations: readonly HealthWeightObservationRecord[];
+  healthWaistObservations: readonly HealthWaistObservationRecord[];
 };
 
 type GetExperimentDayDependencies = {
@@ -38,6 +43,7 @@ type GetExperimentDayDependencies = {
   observationCorrectionRepository: ObservationCorrectionRepository;
   threeSixNineSessionRepository: ThreeSixNineSessionRepository;
   healthWeightObservationRepository: HealthWeightObservationRepository;
+  healthWaistObservationRepository: HealthWaistObservationRepository;
 };
 
 type GetExperimentDayInput = GetExperimentDayDependencies & {
@@ -54,6 +60,7 @@ export function getExperimentDay({
   observationCorrectionRepository,
   threeSixNineSessionRepository,
   healthWeightObservationRepository,
+  healthWaistObservationRepository,
 }: GetExperimentDayInput): GetExperimentDayResult {
   const experimentDay = experimentDayRepository.resolveForDay(
     experimentId,
@@ -67,6 +74,11 @@ export function getExperimentDay({
 
   const healthWeightObservations =
     healthWeightObservationRepository.listForDay(
+      experimentDay.id,
+    );
+
+  const healthWaistObservations =
+    healthWaistObservationRepository.listForDay(
       experimentDay.id,
     );
 
@@ -114,5 +126,6 @@ export function getExperimentDay({
     dailyResult,
     threeSixNineSessions,
     healthWeightObservations,
+    healthWaistObservations,
   };
 }

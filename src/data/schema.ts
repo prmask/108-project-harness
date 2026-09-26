@@ -60,6 +60,27 @@ export const healthWeightObservation = sqliteTable(
   }),
 );
 
+export const healthWaistObservation = sqliteTable(
+  'health_waist_observation',
+  {
+    id: text('id').primaryKey(),
+    experimentDayId: text('experiment_day_id')
+      .notNull()
+      .references(() => experimentDay.id),
+    valueCm: real('value_cm').notNull(),
+    observedAt: text('observed_at').notNull(),
+  },
+  (table) => ({
+    experimentDayLookupIndex: index(
+      'health_waist_observation_experiment_day_id_index',
+    ).on(table.experimentDayId),
+
+    observedAtIndex: index(
+      'health_waist_observation_observed_at_index',
+    ).on(table.observedAt),
+  }),
+);
+
 export const threeSixNineSession = sqliteTable(
   'three_six_nine_session',
   {

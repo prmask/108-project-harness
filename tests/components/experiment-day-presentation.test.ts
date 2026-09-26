@@ -42,6 +42,7 @@ function createResult(
       successful: true,
     },
     healthWeightObservations: [],
+    healthWaistObservations: [],
     ...overrides,
     threeSixNineSessions: overrides.threeSixNineSessions ?? [],
   };
