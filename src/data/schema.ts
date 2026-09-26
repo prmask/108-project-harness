@@ -54,9 +54,9 @@ export const healthWeightObservation = sqliteTable(
       'health_weight_observation_experiment_day_id_index',
     ).on(table.experimentDayId),
 
-    observedAtIndex: index(
-      'health_weight_observation_observed_at_index',
-    ).on(table.observedAt),
+    observedAtIndex: index('health_weight_observation_observed_at_index').on(
+      table.observedAt,
+    ),
   }),
 );
 
@@ -75,8 +75,29 @@ export const healthWaistObservation = sqliteTable(
       'health_waist_observation_experiment_day_id_index',
     ).on(table.experimentDayId),
 
+    observedAtIndex: index('health_waist_observation_observed_at_index').on(
+      table.observedAt,
+    ),
+  }),
+);
+
+export const healthRunningDistanceObservation = sqliteTable(
+  'health_running_distance_observation',
+  {
+    id: text('id').primaryKey(),
+    experimentDayId: text('experiment_day_id')
+      .notNull()
+      .references(() => experimentDay.id),
+    distanceKm: real('distance_km').notNull(),
+    observedAt: text('observed_at').notNull(),
+  },
+  (table) => ({
+    experimentDayLookupIndex: index(
+      'health_running_distance_observation_experiment_day_id_index',
+    ).on(table.experimentDayId),
+
     observedAtIndex: index(
-      'health_waist_observation_observed_at_index',
+      'health_running_distance_observation_observed_at_index',
     ).on(table.observedAt),
   }),
 );

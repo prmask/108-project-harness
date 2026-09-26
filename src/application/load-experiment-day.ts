@@ -1,20 +1,21 @@
-import type Database from "better-sqlite3";
-import { getExperimentDay } from "./get-experiment-day.js";
-import { createExperimentDayRepository } from "../data/experiment-day-repository.js";
-import { createProtocolObservationRepository } from "../data/protocol-observation-repository.js";
-import { createScoringDefinitionRepository } from "../data/scoring-definition-repository.js";
-import { createObservationCorrectionRepository } from "../data/observation-correction-repository.js";
-import { createThreeSixNineSessionRepository } from "../data/three-six-nine-session-repository.js";
-import { createHealthWeightObservationRepository } from "../data/health-weight-observation-repository.js";
-import { createHealthWaistObservationRepository } from "../data/health-waist-observation-repository.js";
+import type Database from 'better-sqlite3';
+import { createExperimentDayRepository } from '../data/experiment-day-repository.js';
+import { createHealthRunningDistanceObservationRepository } from '../data/health-running-distance-observation-repository.js';
+import { createHealthWaistObservationRepository } from '../data/health-waist-observation-repository.js';
+import { createHealthWeightObservationRepository } from '../data/health-weight-observation-repository.js';
+import { createObservationCorrectionRepository } from '../data/observation-correction-repository.js';
+import { createProtocolObservationRepository } from '../data/protocol-observation-repository.js';
+import { createScoringDefinitionRepository } from '../data/scoring-definition-repository.js';
+import { createThreeSixNineSessionRepository } from '../data/three-six-nine-session-repository.js';
+import { getExperimentDay } from './get-experiment-day.js';
 
 export type LoadExperimentDayResult =
   | {
-      status: "available";
+      status: 'available';
       result: ReturnType<typeof getExperimentDay>;
     }
   | {
-      status: "unavailable";
+      status: 'unavailable';
       reason: string;
     };
 
@@ -39,19 +40,21 @@ export function loadExperimentDay(
         createHealthWeightObservationRepository(database),
       healthWaistObservationRepository:
         createHealthWaistObservationRepository(database),
+      healthRunningDistanceObservationRepository:
+        createHealthRunningDistanceObservationRepository(database),
     });
 
     return {
-      status: "available",
+      status: 'available',
       result,
     };
   } catch (error) {
     if (
       error instanceof Error &&
-      error.message.includes("No experiment day found")
+      error.message.includes('No experiment day found')
     ) {
       return {
-        status: "unavailable",
+        status: 'unavailable',
         reason: error.message,
       };
     }

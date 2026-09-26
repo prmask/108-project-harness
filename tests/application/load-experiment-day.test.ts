@@ -68,6 +68,14 @@ function createDatabase(): Database.Database {
       FOREIGN KEY (experiment_day_id) REFERENCES experiment_day(id)
     );
 
+    CREATE TABLE health_running_distance_observation (
+      id TEXT PRIMARY KEY NOT NULL,
+      experiment_day_id TEXT NOT NULL,
+      distance_km REAL NOT NULL,
+      observed_at TEXT NOT NULL,
+      FOREIGN KEY (experiment_day_id) REFERENCES experiment_day(id)
+    );
+
     CREATE TABLE health_weight_observation (
       id TEXT PRIMARY KEY,
       experiment_day_id TEXT NOT NULL,
@@ -205,6 +213,7 @@ describe("load experiment day", () => {
         observations: ["completed", "not_completed"],
         healthWeightObservations: [],
         healthWaistObservations: [],
+        healthRunningDistanceObservations: [],
         threeSixNineSessions: [],
         dailyResult: {
           dayNumber: 1,

@@ -50,6 +50,13 @@
       "when": 1790361762422,
       "tag": "0006_colossal_warpath",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1790408257589,
+      "tag": "0007_unique_lady_bullseye",
+      "breakpoints": true
     }
   ]
 }

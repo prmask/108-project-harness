@@ -1,30 +1,36 @@
-import type { ExperimentDayRecord } from "../data/experiment-day-repository.js";
-import type { ProtocolObservationRepository } from "../data/protocol-observation-repository.js";
-import type { ObservationCorrectionRepository } from "../data/observation-correction-repository.js";
-import type { ScoringDefinition } from "../domain/scoring.js";
 import type {
-  HealthWeightObservationRecord,
-  HealthWeightObservationRepository,
-} from "../data/health-weight-observation-repository.js";
+  ExperimentDayRecord,
+  ExperimentDayRepository,
+} from '../data/experiment-day-repository.js';
+import type {
+  HealthRunningDistanceObservationRecord,
+  HealthRunningDistanceObservationRepository,
+} from '../data/health-running-distance-observation-repository.js';
 import type {
   HealthWaistObservationRecord,
   HealthWaistObservationRepository,
-} from "../data/health-waist-observation-repository.js";
-import type { ScoringDefinitionRepository } from "../data/scoring-definition-repository.js";
+} from '../data/health-waist-observation-repository.js';
+import type {
+  HealthWeightObservationRecord,
+  HealthWeightObservationRepository,
+} from '../data/health-weight-observation-repository.js';
+import type { ObservationCorrectionRepository } from '../data/observation-correction-repository.js';
+import type { ProtocolObservationRepository } from '../data/protocol-observation-repository.js';
+import type { ScoringDefinitionRepository } from '../data/scoring-definition-repository.js';
 import type {
   ThreeSixNineSessionRecord,
   ThreeSixNineSessionRepository,
-} from "../data/three-six-nine-session-repository.js";
+} from '../data/three-six-nine-session-repository.js';
+import {
+  getEffectiveObservationStatus,
+  type ProtocolObservation,
+} from '../domain/correction.js';
+import type { ScoringDefinition } from '../domain/scoring.js';
 import {
   calculateDailyResult,
   type DailyResult,
   type ObservationStatus,
-} from "../domain/scoring.js";
-import {
-  getEffectiveObservationStatus,
-  type ProtocolObservation,
-} from "../domain/correction.js";
-import type { ExperimentDayRepository } from "../data/experiment-day-repository.js";
+} from '../domain/scoring.js';
 
 export type GetExperimentDayResult = {
   experimentDay: ExperimentDayRecord;
@@ -34,6 +40,7 @@ export type GetExperimentDayResult = {
   threeSixNineSessions: readonly ThreeSixNineSessionRecord[];
   healthWeightObservations: readonly HealthWeightObservationRecord[];
   healthWaistObservations: readonly HealthWaistObservationRecord[];
+  healthRunningDistanceObservations: readonly HealthRunningDistanceObservationRecord[];
 };
 
 type GetExperimentDayDependencies = {
@@ -44,6 +51,7 @@ type GetExperimentDayDependencies = {
   threeSixNineSessionRepository: ThreeSixNineSessionRepository;
   healthWeightObservationRepository: HealthWeightObservationRepository;
   healthWaistObservationRepository: HealthWaistObservationRepository;
+  healthRunningDistanceObservationRepository: HealthRunningDistanceObservationRepository;
 };
 
 type GetExperimentDayInput = GetExperimentDayDependencies & {
@@ -61,37 +69,36 @@ export function getExperimentDay({
   threeSixNineSessionRepository,
   healthWeightObservationRepository,
   healthWaistObservationRepository,
+  healthRunningDistanceObservationRepository,
 }: GetExperimentDayInput): GetExperimentDayResult {
   const experimentDay = experimentDayRepository.resolveForDay(
     experimentId,
     dayNumber,
   );
 
-  const threeSixNineSessions =
-    threeSixNineSessionRepository.listForDay(
-      experimentDay.id,
-    );
+  const threeSixNineSessions = threeSixNineSessionRepository.listForDay(
+    experimentDay.id,
+  );
 
-  const healthWeightObservations =
-    healthWeightObservationRepository.listForDay(
-      experimentDay.id,
-    );
+  const healthWeightObservations = healthWeightObservationRepository.listForDay(
+    experimentDay.id,
+  );
 
-  const healthWaistObservations =
-    healthWaistObservationRepository.listForDay(
-      experimentDay.id,
-    );
+  const healthWaistObservations = healthWaistObservationRepository.listForDay(
+    experimentDay.id,
+  );
 
-  const scoringDefinition =
-    scoringDefinitionRepository.resolveForDay(
-      experimentId,
-      dayNumber,
-    );
+  const healthRunningDistanceObservations =
+    healthRunningDistanceObservationRepository.listForDay(experimentDay.id);
 
-  const observationRecords =
-    protocolObservationRepository.listForDay(
-      experimentDay.id,
-    );
+  const scoringDefinition = scoringDefinitionRepository.resolveForDay(
+    experimentId,
+    dayNumber,
+  );
+
+  const observationRecords = protocolObservationRepository.listForDay(
+    experimentDay.id,
+  );
 
   const observations = observationRecords.map((observation) => {
     const protocolObservation: ProtocolObservation = {
@@ -102,15 +109,11 @@ export function getExperimentDay({
       observedAt: observation.observedAt,
     };
 
-    const corrections =
-      observationCorrectionRepository.listForObservation(
-        observation.id,
-      );
-
-    return getEffectiveObservationStatus(
-      protocolObservation,
-      corrections,
+    const corrections = observationCorrectionRepository.listForObservation(
+      observation.id,
     );
+
+    return getEffectiveObservationStatus(protocolObservation, corrections);
   });
 
   const dailyResult = calculateDailyResult(
@@ -127,5 +130,6 @@ export function getExperimentDay({
     threeSixNineSessions,
     healthWeightObservations,
     healthWaistObservations,
+    healthRunningDistanceObservations,
   };
 }
