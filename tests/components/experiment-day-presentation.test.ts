@@ -45,6 +45,8 @@ function createResult(
     healthWaistObservations: [],
     healthRunningDistanceObservations: [],
     ...overrides,
+    healthRunningDurationObservations:
+      overrides.healthRunningDurationObservations ?? [],
     threeSixNineSessions: overrides.threeSixNineSessions ?? [],
   };
 }

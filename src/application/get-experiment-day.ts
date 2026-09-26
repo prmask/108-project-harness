@@ -7,6 +7,10 @@ import type {
   HealthRunningDistanceObservationRepository,
 } from '../data/health-running-distance-observation-repository.js';
 import type {
+  HealthRunningDurationObservationRecord,
+  HealthRunningDurationObservationRepository,
+} from '../data/health-running-duration-observation-repository.js';
+import type {
   HealthWaistObservationRecord,
   HealthWaistObservationRepository,
 } from '../data/health-waist-observation-repository.js';
@@ -41,6 +45,7 @@ export type GetExperimentDayResult = {
   healthWeightObservations: readonly HealthWeightObservationRecord[];
   healthWaistObservations: readonly HealthWaistObservationRecord[];
   healthRunningDistanceObservations: readonly HealthRunningDistanceObservationRecord[];
+  healthRunningDurationObservations: readonly HealthRunningDurationObservationRecord[];
 };
 
 type GetExperimentDayDependencies = {
@@ -52,6 +57,7 @@ type GetExperimentDayDependencies = {
   healthWeightObservationRepository: HealthWeightObservationRepository;
   healthWaistObservationRepository: HealthWaistObservationRepository;
   healthRunningDistanceObservationRepository: HealthRunningDistanceObservationRepository;
+  healthRunningDurationObservationRepository: HealthRunningDurationObservationRepository;
 };
 
 type GetExperimentDayInput = GetExperimentDayDependencies & {
@@ -70,6 +76,7 @@ export function getExperimentDay({
   healthWeightObservationRepository,
   healthWaistObservationRepository,
   healthRunningDistanceObservationRepository,
+  healthRunningDurationObservationRepository,
 }: GetExperimentDayInput): GetExperimentDayResult {
   const experimentDay = experimentDayRepository.resolveForDay(
     experimentId,
@@ -90,6 +97,9 @@ export function getExperimentDay({
 
   const healthRunningDistanceObservations =
     healthRunningDistanceObservationRepository.listForDay(experimentDay.id);
+
+  const healthRunningDurationObservations =
+    healthRunningDurationObservationRepository.listForDay(experimentDay.id);
 
   const scoringDefinition = scoringDefinitionRepository.resolveForDay(
     experimentId,
@@ -131,5 +141,6 @@ export function getExperimentDay({
     healthWeightObservations,
     healthWaistObservations,
     healthRunningDistanceObservations,
+    healthRunningDurationObservations,
   };
 }

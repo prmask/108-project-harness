@@ -1,0 +1,1035 @@
+{
+  "version": "6",
+  "dialect": "sqlite",
+  "id": "a5f6897c-d0a5-40f9-9730-8e382284b71f",
+  "prevId": "c5377bff-228c-46b9-b4bf-c63abbe4ea86",
+  "tables": {
+    "daily_result": {
+      "name": "daily_result",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "experiment_day_id": {
+          "name": "experiment_day_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "scoring_definition_version": {
+          "name": "scoring_definition_version",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "completed_count": {
+          "name": "completed_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expected_count": {
+          "name": "expected_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "successful": {
+          "name": "successful",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "daily_result_scoring_definition_version_index": {
+          "name": "daily_result_scoring_definition_version_index",
+          "columns": [
+            "scoring_definition_version"
+          ],
+          "isUnique": false
+        },
+        "daily_result_experiment_day_id_unique": {
+          "name": "daily_result_experiment_day_id_unique",
+          "columns": [
+            "experiment_day_id"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "daily_result_experiment_day_id_experiment_day_id_fk": {
+          "name": "daily_result_experiment_day_id_experiment_day_id_fk",
+          "tableFrom": "daily_result",
+          "tableTo": "experiment_day",
+          "columnsFrom": [
+            "experiment_day_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "experiment": {
+      "name": "experiment",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "experiment_amendment": {
+      "name": "experiment_amendment",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "experiment_id": {
+          "name": "experiment_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "amended_at": {
+          "name": "amended_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "reason": {
+          "name": "reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "experiment_amendment_experiment_id_index": {
+          "name": "experiment_amendment_experiment_id_index",
+          "columns": [
+            "experiment_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "experiment_amendment_experiment_id_experiment_id_fk": {
+          "name": "experiment_amendment_experiment_id_experiment_id_fk",
+          "tableFrom": "experiment_amendment",
+          "tableTo": "experiment",
+          "columnsFrom": [
+            "experiment_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "experiment_day": {
+      "name": "experiment_day",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "experiment_id": {
+          "name": "experiment_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "day_number": {
+          "name": "day_number",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "date": {
+          "name": "date",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "experiment_day_experiment_id_index": {
+          "name": "experiment_day_experiment_id_index",
+          "columns": [
+            "experiment_id"
+          ],
+          "isUnique": false
+        },
+        "experiment_day_experiment_id_day_number_unique": {
+          "name": "experiment_day_experiment_id_day_number_unique",
+          "columns": [
+            "experiment_id",
+            "day_number"
+          ],
+          "isUnique": true
+        },
+        "experiment_day_experiment_id_date_unique": {
+          "name": "experiment_day_experiment_id_date_unique",
+          "columns": [
+            "experiment_id",
+            "date"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "experiment_day_experiment_id_experiment_id_fk": {
+          "name": "experiment_day_experiment_id_experiment_id_fk",
+          "tableFrom": "experiment_day",
+          "tableTo": "experiment",
+          "columnsFrom": [
+            "experiment_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "health_running_distance_observation": {
+      "name": "health_running_distance_observation",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "experiment_day_id": {
+          "name": "experiment_day_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "distance_km": {
+          "name": "distance_km",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "observed_at": {
+          "name": "observed_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "health_running_distance_observation_experiment_day_id_index": {
+          "name": "health_running_distance_observation_experiment_day_id_index",
+          "columns": [
+            "experiment_day_id"
+          ],
+          "isUnique": false
+        },
+        "health_running_distance_observation_observed_at_index": {
+          "name": "health_running_distance_observation_observed_at_index",
+          "columns": [
+            "observed_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "health_running_distance_observation_experiment_day_id_experiment_day_id_fk": {
+          "name": "health_running_distance_observation_experiment_day_id_experiment_day_id_fk",
+          "tableFrom": "health_running_distance_observation",
+          "tableTo": "experiment_day",
+          "columnsFrom": [
+            "experiment_day_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "health_running_duration_observation": {
+      "name": "health_running_duration_observation",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "experiment_day_id": {
+          "name": "experiment_day_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "duration_minutes": {
+          "name": "duration_minutes",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "observed_at": {
+          "name": "observed_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "health_running_duration_observation_experiment_day_id_index": {
+          "name": "health_running_duration_observation_experiment_day_id_index",
+          "columns": [
+            "experiment_day_id"
+          ],
+          "isUnique": false
+        },
+        "health_running_duration_observation_observed_at_index": {
+          "name": "health_running_duration_observation_observed_at_index",
+          "columns": [
+            "observed_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "health_running_duration_observation_experiment_day_id_experiment_day_id_fk": {
+          "name": "health_running_duration_observation_experiment_day_id_experiment_day_id_fk",
+          "tableFrom": "health_running_duration_observation",
+          "tableTo": "experiment_day",
+          "columnsFrom": [
+            "experiment_day_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "health_waist_observation": {
+      "name": "health_waist_observation",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "experiment_day_id": {
+          "name": "experiment_day_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "value_cm": {
+          "name": "value_cm",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "observed_at": {
+          "name": "observed_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "health_waist_observation_experiment_day_id_index": {
+          "name": "health_waist_observation_experiment_day_id_index",
+          "columns": [
+            "experiment_day_id"
+          ],
+          "isUnique": false
+        },
+        "health_waist_observation_observed_at_index": {
+          "name": "health_waist_observation_observed_at_index",
+          "columns": [
+            "observed_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "health_waist_observation_experiment_day_id_experiment_day_id_fk": {
+          "name": "health_waist_observation_experiment_day_id_experiment_day_id_fk",
+          "tableFrom": "health_waist_observation",
+          "tableTo": "experiment_day",
+          "columnsFrom": [
+            "experiment_day_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "health_weight_observation": {
+      "name": "health_weight_observation",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "experiment_day_id": {
+          "name": "experiment_day_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "value_kg": {
+          "name": "value_kg",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "observed_at": {
+          "name": "observed_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "health_weight_observation_experiment_day_id_index": {
+          "name": "health_weight_observation_experiment_day_id_index",
+          "columns": [
+            "experiment_day_id"
+          ],
+          "isUnique": false
+        },
+        "health_weight_observation_observed_at_index": {
+          "name": "health_weight_observation_observed_at_index",
+          "columns": [
+            "observed_at"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "health_weight_observation_experiment_day_id_experiment_day_id_fk": {
+          "name": "health_weight_observation_experiment_day_id_experiment_day_id_fk",
+          "tableFrom": "health_weight_observation",
+          "tableTo": "experiment_day",
+          "columnsFrom": [
+            "experiment_day_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "observation_correction": {
+      "name": "observation_correction",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "observation_id": {
+          "name": "observation_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "original_status": {
+          "name": "original_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "corrected_status": {
+          "name": "corrected_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "corrected_at": {
+          "name": "corrected_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "reason": {
+          "name": "reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "observation_correction_observation_id_index": {
+          "name": "observation_correction_observation_id_index",
+          "columns": [
+            "observation_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "observation_correction_observation_id_protocol_observation_id_fk": {
+          "name": "observation_correction_observation_id_protocol_observation_id_fk",
+          "tableFrom": "observation_correction",
+          "tableTo": "protocol_observation",
+          "columnsFrom": [
+            "observation_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "observation_correction_corrected_status_check": {
+          "name": "observation_correction_corrected_status_check",
+          "value": "\"observation_correction\".\"corrected_status\" IN ('completed', 'not_completed', 'missing')"
+        }
+      }
+    },
+    "protocol_definition": {
+      "name": "protocol_definition",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "experiment_id": {
+          "name": "experiment_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "version": {
+          "name": "version",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "effective_from_day": {
+          "name": "effective_from_day",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "effective_to_day": {
+          "name": "effective_to_day",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "protocol_definition_experiment_id_effective_day_index": {
+          "name": "protocol_definition_experiment_id_effective_day_index",
+          "columns": [
+            "experiment_id",
+            "effective_from_day",
+            "effective_to_day"
+          ],
+          "isUnique": false
+        },
+        "protocol_definition_experiment_id_version_unique": {
+          "name": "protocol_definition_experiment_id_version_unique",
+          "columns": [
+            "experiment_id",
+            "version"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "protocol_definition_experiment_id_experiment_id_fk": {
+          "name": "protocol_definition_experiment_id_experiment_id_fk",
+          "tableFrom": "protocol_definition",
+          "tableTo": "experiment",
+          "columnsFrom": [
+            "experiment_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "protocol_item": {
+      "name": "protocol_item",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "protocol_definition_id": {
+          "name": "protocol_definition_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "item_order": {
+          "name": "item_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "required": {
+          "name": "required",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "protocol_item_protocol_definition_id_item_order_unique": {
+          "name": "protocol_item_protocol_definition_id_item_order_unique",
+          "columns": [
+            "protocol_definition_id",
+            "item_order"
+          ],
+          "isUnique": true
+        },
+        "protocol_item_protocol_definition_id_id_unique": {
+          "name": "protocol_item_protocol_definition_id_id_unique",
+          "columns": [
+            "protocol_definition_id",
+            "id"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "protocol_item_protocol_definition_id_protocol_definition_id_fk": {
+          "name": "protocol_item_protocol_definition_id_protocol_definition_id_fk",
+          "tableFrom": "protocol_item",
+          "tableTo": "protocol_definition",
+          "columnsFrom": [
+            "protocol_definition_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "protocol_observation": {
+      "name": "protocol_observation",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "experiment_day_id": {
+          "name": "experiment_day_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "protocol_item_id": {
+          "name": "protocol_item_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "observed_at": {
+          "name": "observed_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "protocol_observation_protocol_item_id_index": {
+          "name": "protocol_observation_protocol_item_id_index",
+          "columns": [
+            "protocol_item_id"
+          ],
+          "isUnique": false
+        },
+        "protocol_observation_experiment_day_id_protocol_item_id_unique": {
+          "name": "protocol_observation_experiment_day_id_protocol_item_id_unique",
+          "columns": [
+            "experiment_day_id",
+            "protocol_item_id"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "protocol_observation_experiment_day_id_experiment_day_id_fk": {
+          "name": "protocol_observation_experiment_day_id_experiment_day_id_fk",
+          "tableFrom": "protocol_observation",
+          "tableTo": "experiment_day",
+          "columnsFrom": [
+            "experiment_day_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "protocol_observation_protocol_item_id_protocol_item_id_fk": {
+          "name": "protocol_observation_protocol_item_id_protocol_item_id_fk",
+          "tableFrom": "protocol_observation",
+          "tableTo": "protocol_item",
+          "columnsFrom": [
+            "protocol_item_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "protocol_observation_status_check": {
+          "name": "protocol_observation_status_check",
+          "value": "\"protocol_observation\".\"status\" IN ('completed', 'not_completed', 'missing')"
+        }
+      }
+    },
+    "scoring_definition": {
+      "name": "scoring_definition",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "experiment_id": {
+          "name": "experiment_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "version": {
+          "name": "version",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "effective_from_day": {
+          "name": "effective_from_day",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "effective_to_day": {
+          "name": "effective_to_day",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "required_completed_count": {
+          "name": "required_completed_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expected_count": {
+          "name": "expected_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "scoring_definition_experiment_id_effective_day_index": {
+          "name": "scoring_definition_experiment_id_effective_day_index",
+          "columns": [
+            "experiment_id",
+            "effective_from_day",
+            "effective_to_day"
+          ],
+          "isUnique": false
+        },
+        "scoring_definition_experiment_id_version_unique": {
+          "name": "scoring_definition_experiment_id_version_unique",
+          "columns": [
+            "experiment_id",
+            "version"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "scoring_definition_experiment_id_experiment_id_fk": {
+          "name": "scoring_definition_experiment_id_experiment_id_fk",
+          "tableFrom": "scoring_definition",
+          "tableTo": "experiment",
+          "columnsFrom": [
+            "experiment_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "three_six_nine_session": {
+      "name": "three_six_nine_session",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "experiment_day_id": {
+          "name": "experiment_day_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "period": {
+          "name": "period",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "planned_repetitions": {
+          "name": "planned_repetitions",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "completed_repetitions": {
+          "name": "completed_repetitions",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "completed_at": {
+          "name": "completed_at",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "three_six_nine_session_day_period_unique": {
+          "name": "three_six_nine_session_day_period_unique",
+          "columns": [
+            "experiment_day_id",
+            "period"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "three_six_nine_session_experiment_day_id_experiment_day_id_fk": {
+          "name": "three_six_nine_session_experiment_day_id_experiment_day_id_fk",
+          "tableFrom": "three_six_nine_session",
+          "tableTo": "experiment_day",
+          "columnsFrom": [
+            "experiment_day_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "three_six_nine_session_period_check": {
+          "name": "three_six_nine_session_period_check",
+          "value": "period IN ('morning', 'afternoon', 'evening')"
+        },
+        "three_six_nine_session_status_check": {
+          "name": "three_six_nine_session_status_check",
+          "value": "status IN ('completed', 'not_completed', 'missing')"
+        },
+        "three_six_nine_session_planned_repetitions_check": {
+          "name": "three_six_nine_session_planned_repetitions_check",
+          "value": "planned_repetitions IN (3, 6, 9)"
+        },
+        "three_six_nine_session_completed_repetitions_check": {
+          "name": "three_six_nine_session_completed_repetitions_check",
+          "value": "completed_repetitions >= 0\n          AND completed_repetitions <= planned_repetitions"
+        }
+      }
+    }
+  },
+  "views": {},
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "indexes": {}
+  }
+}

@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { getExperimentDay } from '../../src/application/get-experiment-day.js';
 import { createExperimentDayRepository } from '../../src/data/experiment-day-repository.js';
 import { createHealthRunningDistanceObservationRepository } from '../../src/data/health-running-distance-observation-repository.js';
+import { createHealthRunningDurationObservationRepository } from '../../src/data/health-running-duration-observation-repository.js';
 import { createHealthWaistObservationRepository } from '../../src/data/health-waist-observation-repository.js';
 import { createHealthWeightObservationRepository } from '../../src/data/health-weight-observation-repository.js';
 import { createObservationCorrectionRepository } from '../../src/data/observation-correction-repository.js';
@@ -81,6 +82,14 @@ function createTestDatabase() {
       id TEXT PRIMARY KEY NOT NULL,
       experiment_day_id TEXT NOT NULL,
       distance_km REAL NOT NULL,
+      observed_at TEXT NOT NULL,
+      FOREIGN KEY (experiment_day_id) REFERENCES experiment_day(id)
+    );
+
+    CREATE TABLE health_running_duration_observation (
+      id TEXT PRIMARY KEY NOT NULL,
+      experiment_day_id TEXT NOT NULL,
+      duration_minutes REAL NOT NULL,
       observed_at TEXT NOT NULL,
       FOREIGN KEY (experiment_day_id) REFERENCES experiment_day(id)
     );
@@ -259,6 +268,8 @@ function createApplicationInput(database: Database.Database, dayNumber = 1) {
       createHealthWaistObservationRepository(database),
     healthRunningDistanceObservationRepository:
       createHealthRunningDistanceObservationRepository(database),
+    healthRunningDurationObservationRepository:
+      createHealthRunningDurationObservationRepository(database),
   };
 }
 
@@ -284,6 +295,8 @@ describe('getExperimentDay', () => {
     });
 
     expect(result.observations).toEqual(['completed', 'not_completed']);
+
+    expect(result.healthRunningDurationObservations).toEqual([]);
 
     expect(result.dailyResult).toEqual({
       dayNumber: 1,

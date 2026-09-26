@@ -1,6 +1,7 @@
 import type Database from 'better-sqlite3';
 import { createExperimentDayRepository } from '../data/experiment-day-repository.js';
 import { createHealthRunningDistanceObservationRepository } from '../data/health-running-distance-observation-repository.js';
+import { createHealthRunningDurationObservationRepository } from '../data/health-running-duration-observation-repository.js';
 import { createHealthWaistObservationRepository } from '../data/health-waist-observation-repository.js';
 import { createHealthWeightObservationRepository } from '../data/health-weight-observation-repository.js';
 import { createObservationCorrectionRepository } from '../data/observation-correction-repository.js';
@@ -42,6 +43,8 @@ export function loadExperimentDay(
         createHealthWaistObservationRepository(database),
       healthRunningDistanceObservationRepository:
         createHealthRunningDistanceObservationRepository(database),
+      healthRunningDurationObservationRepository:
+        createHealthRunningDurationObservationRepository(database),
     });
 
     return {
