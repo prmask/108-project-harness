@@ -71,6 +71,13 @@
       "when": 1790430017324,
       "tag": "0009_light_silver_centurion",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1790507610347,
+      "tag": "0010_abandoned_crystal",
+      "breakpoints": true
     }
   ]
 }

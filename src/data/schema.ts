@@ -144,6 +144,30 @@ export const wealthRevenueObservation = sqliteTable(
   }),
 );
 
+export const opportunityObservation = sqliteTable(
+  'opportunity_observation',
+  {
+    id: text('id').primaryKey(),
+    experimentDayId: text('experiment_day_id')
+      .notNull()
+      .references(() => experimentDay.id),
+    whatHappened: text('what_happened').notNull(),
+    source: text('source').notNull(),
+    isUnexpected: integer('is_unexpected').notNull(),
+    goalRelated: integer('goal_related').notNull(),
+    actionTaken: text('action_taken').notNull(),
+    potentialValue: real('potential_value'),
+    actualValue: real('actual_value'),
+    outcome: text('outcome').notNull(),
+    notes: text('notes').notNull(),
+  },
+  (table) => ({
+    experimentDayLookupIndex: index(
+      'opportunity_observation_experiment_day_id_index',
+    ).on(table.experimentDayId),
+  }),
+);
+
 export const threeSixNineSession = sqliteTable(
   'three_six_nine_session',
   {

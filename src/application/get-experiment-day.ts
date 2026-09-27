@@ -29,6 +29,10 @@ import type {
   WealthRevenueObservationRecord,
   WealthRevenueObservationRepository,
 } from '../data/wealth-revenue-observation-repository.js';
+import type {
+  OpportunityObservationRecord,
+  OpportunityObservationRepository,
+} from '../data/opportunity-observation-repository.js';
 import {
   getEffectiveObservationStatus,
   type ProtocolObservation,
@@ -51,6 +55,7 @@ export type GetExperimentDayResult = {
   healthRunningDistanceObservations: readonly HealthRunningDistanceObservationRecord[];
   healthRunningDurationObservations: readonly HealthRunningDurationObservationRecord[];
   wealthRevenueObservations: readonly WealthRevenueObservationRecord[];
+  opportunityObservations: readonly OpportunityObservationRecord[];
 };
 
 type GetExperimentDayDependencies = {
@@ -64,6 +69,7 @@ type GetExperimentDayDependencies = {
   healthRunningDistanceObservationRepository: HealthRunningDistanceObservationRepository;
   healthRunningDurationObservationRepository: HealthRunningDurationObservationRepository;
   wealthRevenueObservationRepository: WealthRevenueObservationRepository;
+  opportunityObservationRepository: OpportunityObservationRepository;
 };
 
 type GetExperimentDayInput = GetExperimentDayDependencies & {
@@ -84,6 +90,7 @@ export function getExperimentDay({
   healthRunningDistanceObservationRepository,
   healthRunningDurationObservationRepository,
   wealthRevenueObservationRepository,
+  opportunityObservationRepository,
 }: GetExperimentDayInput): GetExperimentDayResult {
   const experimentDay = experimentDayRepository.resolveForDay(
     experimentId,
@@ -120,6 +127,9 @@ export function getExperimentDay({
   const wealthRevenueObservations =
     wealthRevenueObservationRepository.listForDay(experimentDay.id);
 
+  const opportunityObservations =
+    opportunityObservationRepository.listForDay(experimentDay.id);
+
   const observations = observationRecords.map((observation) => {
     const protocolObservation: ProtocolObservation = {
       id: observation.id,
@@ -153,5 +163,6 @@ export function getExperimentDay({
     healthRunningDistanceObservations,
     healthRunningDurationObservations,
     wealthRevenueObservations,
+    opportunityObservations,
   };
 }

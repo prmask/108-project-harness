@@ -11,6 +11,7 @@ import { createProtocolObservationRepository } from '../../src/data/protocol-obs
 import { createScoringDefinitionRepository } from '../../src/data/scoring-definition-repository.js';
 import { createThreeSixNineSessionRepository } from '../../src/data/three-six-nine-session-repository.js';
 import { createWealthRevenueObservationRepository } from '../../src/data/wealth-revenue-observation-repository.js';
+import { createOpportunityObservationRepository } from '../../src/data/opportunity-observation-repository.js';
 
 function createTestDatabase() {
   const database = new Database(':memory:');
@@ -110,6 +111,23 @@ function createTestDatabase() {
       observed_at TEXT NOT NULL,
       FOREIGN KEY (experiment_day_id) REFERENCES experiment_day(id)
     );
+
+    CREATE TABLE opportunity_observation (
+      id TEXT PRIMARY KEY,
+      experiment_day_id TEXT NOT NULL,
+      what_happened TEXT NOT NULL,
+      source TEXT NOT NULL,
+      is_unexpected INTEGER NOT NULL,
+      goal_related INTEGER NOT NULL,
+      action_taken TEXT NOT NULL,
+      potential_value REAL,
+      actual_value REAL,
+      outcome TEXT NOT NULL,
+      notes TEXT NOT NULL,
+      FOREIGN KEY (experiment_day_id) REFERENCES experiment_day(id)
+    );
+
+
   `);
 
   database
@@ -281,6 +299,8 @@ function createApplicationInput(database: Database.Database, dayNumber = 1) {
       createHealthRunningDurationObservationRepository(database),
     wealthRevenueObservationRepository:
       createWealthRevenueObservationRepository(database),
+    opportunityObservationRepository:
+      createOpportunityObservationRepository(database),
   };
 }
 

@@ -99,6 +99,21 @@ function createDatabase(): Database.Database {
       observed_at TEXT NOT NULL,
       FOREIGN KEY (experiment_day_id) REFERENCES experiment_day(id)
     );
+
+    CREATE TABLE opportunity_observation (
+      id TEXT PRIMARY KEY,
+      experiment_day_id TEXT NOT NULL,
+      what_happened TEXT NOT NULL,
+      source TEXT NOT NULL,
+      is_unexpected INTEGER NOT NULL,
+      goal_related INTEGER NOT NULL,
+      action_taken TEXT NOT NULL,
+      potential_value REAL,
+      actual_value REAL,
+      outcome TEXT NOT NULL,
+      notes TEXT NOT NULL,
+      FOREIGN KEY (experiment_day_id) REFERENCES experiment_day(id)
+    );
   `);
 
   return database;
@@ -222,6 +237,7 @@ describe('load experiment day', () => {
         healthRunningDurationObservations: [],
         threeSixNineSessions: [],
         wealthRevenueObservations: [],
+        opportunityObservations: [],
         dailyResult: {
           dayNumber: 1,
           scoringDefinitionVersion: 'v1',

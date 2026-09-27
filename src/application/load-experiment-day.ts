@@ -9,6 +9,7 @@ import { createProtocolObservationRepository } from '../data/protocol-observatio
 import { createScoringDefinitionRepository } from '../data/scoring-definition-repository.js';
 import { createThreeSixNineSessionRepository } from '../data/three-six-nine-session-repository.js';
 import { createWealthRevenueObservationRepository } from '../data/wealth-revenue-observation-repository.js';
+import { createOpportunityObservationRepository } from '../data/opportunity-observation-repository.js';
 import { getExperimentDay } from './get-experiment-day.js';
 
 export type LoadExperimentDayResult =
@@ -48,6 +49,8 @@ export function loadExperimentDay(
         createHealthRunningDurationObservationRepository(database),
       wealthRevenueObservationRepository:
         createWealthRevenueObservationRepository(database),
+      opportunityObservationRepository:
+        createOpportunityObservationRepository(database),
     });
 
     return {
