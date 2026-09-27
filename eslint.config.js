@@ -7,7 +7,7 @@ export default tseslint.config(
   },
   eslint.configs.recommended,
   {
-    files: ['.harness/**/*.mjs'],
+    files: ['.harness/**/*.mjs', 'scripts/**/*.mjs'],
     languageOptions: {
       globals: {
         process: 'readonly',
