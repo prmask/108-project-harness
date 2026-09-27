@@ -25,6 +25,10 @@ import type {
   ThreeSixNineSessionRecord,
   ThreeSixNineSessionRepository,
 } from '../data/three-six-nine-session-repository.js';
+import type {
+  WealthRevenueObservationRecord,
+  WealthRevenueObservationRepository,
+} from '../data/wealth-revenue-observation-repository.js';
 import {
   getEffectiveObservationStatus,
   type ProtocolObservation,
@@ -46,6 +50,7 @@ export type GetExperimentDayResult = {
   healthWaistObservations: readonly HealthWaistObservationRecord[];
   healthRunningDistanceObservations: readonly HealthRunningDistanceObservationRecord[];
   healthRunningDurationObservations: readonly HealthRunningDurationObservationRecord[];
+  wealthRevenueObservations: readonly WealthRevenueObservationRecord[];
 };
 
 type GetExperimentDayDependencies = {
@@ -58,6 +63,7 @@ type GetExperimentDayDependencies = {
   healthWaistObservationRepository: HealthWaistObservationRepository;
   healthRunningDistanceObservationRepository: HealthRunningDistanceObservationRepository;
   healthRunningDurationObservationRepository: HealthRunningDurationObservationRepository;
+  wealthRevenueObservationRepository: WealthRevenueObservationRepository;
 };
 
 type GetExperimentDayInput = GetExperimentDayDependencies & {
@@ -77,6 +83,7 @@ export function getExperimentDay({
   healthWaistObservationRepository,
   healthRunningDistanceObservationRepository,
   healthRunningDurationObservationRepository,
+  wealthRevenueObservationRepository,
 }: GetExperimentDayInput): GetExperimentDayResult {
   const experimentDay = experimentDayRepository.resolveForDay(
     experimentId,
@@ -110,6 +117,9 @@ export function getExperimentDay({
     experimentDay.id,
   );
 
+  const wealthRevenueObservations =
+    wealthRevenueObservationRepository.listForDay(experimentDay.id);
+
   const observations = observationRecords.map((observation) => {
     const protocolObservation: ProtocolObservation = {
       id: observation.id,
@@ -142,5 +152,6 @@ export function getExperimentDay({
     healthWaistObservations,
     healthRunningDistanceObservations,
     healthRunningDurationObservations,
+    wealthRevenueObservations,
   };
 }

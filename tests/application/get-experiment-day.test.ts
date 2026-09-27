@@ -10,6 +10,7 @@ import { createObservationCorrectionRepository } from '../../src/data/observatio
 import { createProtocolObservationRepository } from '../../src/data/protocol-observation-repository.js';
 import { createScoringDefinitionRepository } from '../../src/data/scoring-definition-repository.js';
 import { createThreeSixNineSessionRepository } from '../../src/data/three-six-nine-session-repository.js';
+import { createWealthRevenueObservationRepository } from '../../src/data/wealth-revenue-observation-repository.js';
 
 function createTestDatabase() {
   const database = new Database(':memory:');
@@ -90,6 +91,14 @@ function createTestDatabase() {
       id TEXT PRIMARY KEY NOT NULL,
       experiment_day_id TEXT NOT NULL,
       duration_minutes REAL NOT NULL,
+      observed_at TEXT NOT NULL,
+      FOREIGN KEY (experiment_day_id) REFERENCES experiment_day(id)
+    );
+
+    CREATE TABLE wealth_revenue_observation (
+      id TEXT PRIMARY KEY,
+      experiment_day_id TEXT NOT NULL,
+      amount REAL NOT NULL,
       observed_at TEXT NOT NULL,
       FOREIGN KEY (experiment_day_id) REFERENCES experiment_day(id)
     );
@@ -270,6 +279,8 @@ function createApplicationInput(database: Database.Database, dayNumber = 1) {
       createHealthRunningDistanceObservationRepository(database),
     healthRunningDurationObservationRepository:
       createHealthRunningDurationObservationRepository(database),
+    wealthRevenueObservationRepository:
+      createWealthRevenueObservationRepository(database),
   };
 }
 

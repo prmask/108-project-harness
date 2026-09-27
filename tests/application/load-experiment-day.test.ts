@@ -1,9 +1,9 @@
-import Database from "better-sqlite3";
-import { describe, expect, it } from "vitest";
-import { loadExperimentDay } from "../../src/application/load-experiment-day.js";
+import Database from 'better-sqlite3';
+import { describe, expect, it } from 'vitest';
+import { loadExperimentDay } from '../../src/application/load-experiment-day.js';
 
 function createDatabase(): Database.Database {
-  const database = new Database(":memory:");
+  const database = new Database(':memory:');
 
   database.exec(`
     CREATE TABLE experiment (
@@ -84,6 +84,14 @@ function createDatabase(): Database.Database {
       FOREIGN KEY (experiment_day_id) REFERENCES experiment_day(id)
     );
 
+    CREATE TABLE wealth_revenue_observation (
+      id TEXT PRIMARY KEY,
+      experiment_day_id TEXT NOT NULL,
+      amount REAL NOT NULL,
+      observed_at TEXT NOT NULL,
+      FOREIGN KEY (experiment_day_id) REFERENCES experiment_day(id)
+    );
+
     CREATE TABLE health_weight_observation (
       id TEXT PRIMARY KEY,
       experiment_day_id TEXT NOT NULL,
@@ -96,30 +104,29 @@ function createDatabase(): Database.Database {
   return database;
 }
 
-describe("load experiment day", () => {
-  it("returns unavailable when the requested experiment day does not exist", () => {
+describe('load experiment day', () => {
+  it('returns unavailable when the requested experiment day does not exist', () => {
     const database = createDatabase();
 
-    expect(
-      loadExperimentDay(database, "108-day-experiment", 17),
-    ).toEqual({
-      status: "unavailable",
+    expect(loadExperimentDay(database, '108-day-experiment', 17)).toEqual({
+      status: 'unavailable',
       reason:
-        "No experiment day found for experiment 108-day-experiment on day 17",
+        'No experiment day found for experiment 108-day-experiment on day 17',
     });
 
     database.close();
   });
 
-  it("loads a recorded experiment day and calculates its result", () => {
+  it('loads a recorded experiment day and calculates its result', () => {
     const database = createDatabase();
 
     database
-      .prepare("INSERT INTO experiment (id) VALUES (?)")
-      .run("108-day-experiment");
+      .prepare('INSERT INTO experiment (id) VALUES (?)')
+      .run('108-day-experiment');
 
     database
-      .prepare(`
+      .prepare(
+        `
         INSERT INTO experiment_day (
           id,
           experiment_id,
@@ -127,16 +134,13 @@ describe("load experiment day", () => {
           date
         )
         VALUES (?, ?, ?, ?)
-      `)
-      .run(
-        "day-1",
-        "108-day-experiment",
-        1,
-        "2026-09-07",
-      );
+      `,
+      )
+      .run('day-1', '108-day-experiment', 1, '2026-09-07');
 
     database
-      .prepare(`
+      .prepare(
+        `
         INSERT INTO scoring_definition (
           id,
           experiment_id,
@@ -147,19 +151,13 @@ describe("load experiment day", () => {
           expected_count
         )
         VALUES (?, ?, ?, ?, ?, ?, ?)
-      `)
-      .run(
-        "scoring-v1",
-        "108-day-experiment",
-        "v1",
-        1,
-        46,
-        13,
-        13,
-      );
+      `,
+      )
+      .run('scoring-v1', '108-day-experiment', 'v1', 1, 46, 13, 13);
 
     database
-      .prepare(`
+      .prepare(
+        `
         INSERT INTO protocol_observation (
           id,
           experiment_day_id,
@@ -168,17 +166,19 @@ describe("load experiment day", () => {
           observed_at
         )
         VALUES (?, ?, ?, ?, ?)
-      `)
+      `,
+      )
       .run(
-        "observation-1",
-        "day-1",
-        "wake-0350",
-        "completed",
-        "2026-09-07T03:50:00Z",
+        'observation-1',
+        'day-1',
+        'wake-0350',
+        'completed',
+        '2026-09-07T03:50:00Z',
       );
 
     database
-      .prepare(`
+      .prepare(
+        `
         INSERT INTO protocol_observation (
           id,
           experiment_day_id,
@@ -187,46 +187,44 @@ describe("load experiment day", () => {
           observed_at
         )
         VALUES (?, ?, ?, ?, ?)
-      `)
+      `,
+      )
       .run(
-        "observation-2",
-        "day-1",
-        "run-0520",
-        "not_completed",
-        "2026-09-07T05:20:00Z",
+        'observation-2',
+        'day-1',
+        'run-0520',
+        'not_completed',
+        '2026-09-07T05:20:00Z',
       );
 
-    const loaded = loadExperimentDay(
-      database,
-      "108-day-experiment",
-      1,
-    );
+    const loaded = loadExperimentDay(database, '108-day-experiment', 1);
 
     expect(loaded).toEqual({
-      status: "available",
+      status: 'available',
       result: {
         experimentDay: {
-          id: "day-1",
-          experimentId: "108-day-experiment",
+          id: 'day-1',
+          experimentId: '108-day-experiment',
           dayNumber: 1,
-          date: "2026-09-07",
+          date: '2026-09-07',
         },
         scoringDefinition: {
-          version: "v1",
+          version: 'v1',
           effectiveFromDay: 1,
           effectiveToDay: 46,
           requiredCompletedCount: 13,
           expectedCount: 13,
         },
-        observations: ["completed", "not_completed"],
+        observations: ['completed', 'not_completed'],
         healthWeightObservations: [],
         healthWaistObservations: [],
         healthRunningDistanceObservations: [],
         healthRunningDurationObservations: [],
         threeSixNineSessions: [],
+        wealthRevenueObservations: [],
         dailyResult: {
           dayNumber: 1,
-          scoringDefinitionVersion: "v1",
+          scoringDefinitionVersion: 'v1',
           completedCount: 1,
           expectedCount: 13,
           successful: false,

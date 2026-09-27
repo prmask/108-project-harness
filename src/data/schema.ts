@@ -123,6 +123,27 @@ export const healthRunningDurationObservation = sqliteTable(
   }),
 );
 
+export const wealthRevenueObservation = sqliteTable(
+  'wealth_revenue_observation',
+  {
+    id: text('id').primaryKey(),
+    experimentDayId: text('experiment_day_id')
+      .notNull()
+      .references(() => experimentDay.id),
+    amount: real('amount').notNull(),
+    observedAt: text('observed_at').notNull(),
+  },
+  (table) => ({
+    experimentDayLookupIndex: index(
+      'wealth_revenue_observation_experiment_day_id_index',
+    ).on(table.experimentDayId),
+
+    observedAtIndex: index('wealth_revenue_observation_observed_at_index').on(
+      table.observedAt,
+    ),
+  }),
+);
+
 export const threeSixNineSession = sqliteTable(
   'three_six_nine_session',
   {
