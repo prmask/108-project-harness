@@ -1,6 +1,7 @@
 import Database from 'better-sqlite3';
 import { describe, expect, it } from 'vitest';
 import { getExperimentDay } from '../../src/application/get-experiment-day.js';
+import { createEvidenceObservationRepository } from '../../src/data/evidence-observation-repository.js';
 import { createExperimentDayRepository } from '../../src/data/experiment-day-repository.js';
 import { createHealthRunningDistanceObservationRepository } from '../../src/data/health-running-distance-observation-repository.js';
 import { createHealthRunningDurationObservationRepository } from '../../src/data/health-running-duration-observation-repository.js';
@@ -126,6 +127,17 @@ function createTestDatabase() {
       notes TEXT NOT NULL,
       FOREIGN KEY (experiment_day_id) REFERENCES experiment_day(id)
     );
+
+    CREATE TABLE evidence_observation (
+      id TEXT PRIMARY KEY,
+      experiment_day_id TEXT NOT NULL,
+      hypothesis_id TEXT NOT NULL,
+      category TEXT NOT NULL,
+      observation TEXT NOT NULL,
+      recorded_at TEXT NOT NULL,
+      FOREIGN KEY (experiment_day_id) REFERENCES experiment_day(id)
+    );
+
 
 
   `);
@@ -301,6 +313,8 @@ function createApplicationInput(database: Database.Database, dayNumber = 1) {
       createWealthRevenueObservationRepository(database),
     opportunityObservationRepository:
       createOpportunityObservationRepository(database),
+    evidenceObservationRepository:
+      createEvidenceObservationRepository(database),
   };
 }
 

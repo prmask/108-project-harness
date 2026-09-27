@@ -18,6 +18,10 @@ import type {
   HealthWeightObservationRecord,
   HealthWeightObservationRepository,
 } from '../data/health-weight-observation-repository.js';
+import type {
+  EvidenceObservationRecord,
+  EvidenceObservationRepository,
+} from '../data/evidence-observation-repository.js';
 import type { ObservationCorrectionRepository } from '../data/observation-correction-repository.js';
 import type { ProtocolObservationRepository } from '../data/protocol-observation-repository.js';
 import type { ScoringDefinitionRepository } from '../data/scoring-definition-repository.js';
@@ -56,6 +60,7 @@ export type GetExperimentDayResult = {
   healthRunningDurationObservations: readonly HealthRunningDurationObservationRecord[];
   wealthRevenueObservations: readonly WealthRevenueObservationRecord[];
   opportunityObservations: readonly OpportunityObservationRecord[];
+  evidenceObservations: readonly EvidenceObservationRecord[];
 };
 
 type GetExperimentDayDependencies = {
@@ -70,6 +75,7 @@ type GetExperimentDayDependencies = {
   healthRunningDurationObservationRepository: HealthRunningDurationObservationRepository;
   wealthRevenueObservationRepository: WealthRevenueObservationRepository;
   opportunityObservationRepository: OpportunityObservationRepository;
+  evidenceObservationRepository: EvidenceObservationRepository;
 };
 
 type GetExperimentDayInput = GetExperimentDayDependencies & {
@@ -91,6 +97,7 @@ export function getExperimentDay({
   healthRunningDurationObservationRepository,
   wealthRevenueObservationRepository,
   opportunityObservationRepository,
+  evidenceObservationRepository,
 }: GetExperimentDayInput): GetExperimentDayResult {
   const experimentDay = experimentDayRepository.resolveForDay(
     experimentId,
@@ -130,6 +137,9 @@ export function getExperimentDay({
   const opportunityObservations =
     opportunityObservationRepository.listForDay(experimentDay.id);
 
+  const evidenceObservations =
+    evidenceObservationRepository.listForDay(experimentDay.id);
+
   const observations = observationRecords.map((observation) => {
     const protocolObservation: ProtocolObservation = {
       id: observation.id,
@@ -164,5 +174,6 @@ export function getExperimentDay({
     healthRunningDurationObservations,
     wealthRevenueObservations,
     opportunityObservations,
+    evidenceObservations,
   };
 }

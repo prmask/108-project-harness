@@ -144,6 +144,32 @@ export const wealthRevenueObservation = sqliteTable(
   }),
 );
 
+export const evidenceObservation = sqliteTable(
+  'evidence_observation',
+  {
+    id: text('id').primaryKey(),
+    experimentDayId: text('experiment_day_id')
+      .notNull()
+      .references(() => experimentDay.id),
+    hypothesisId: text('hypothesis_id').notNull(),
+    category: text('category').notNull(),
+    observation: text('observation').notNull(),
+    recordedAt: text('recorded_at').notNull(),
+  },
+  (table) => ({
+    experimentDayLookupIndex: index(
+      'evidence_observation_experiment_day_id_index',
+    ).on(table.experimentDayId),
+    hypothesisLookupIndex: index(
+      'evidence_observation_hypothesis_id_index',
+    ).on(table.hypothesisId),
+    categoryCheck: check(
+      'evidence_observation_category_check',
+      sql`${table.category} IN ('supporting', 'challenging', 'alternative_explanation')`,
+    ),
+  }),
+);
+
 export const opportunityObservation = sqliteTable(
   'opportunity_observation',
   {

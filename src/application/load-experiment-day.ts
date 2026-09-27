@@ -1,4 +1,5 @@
 import type Database from 'better-sqlite3';
+import { createEvidenceObservationRepository } from '../data/evidence-observation-repository.js';
 import { createExperimentDayRepository } from '../data/experiment-day-repository.js';
 import { createHealthRunningDistanceObservationRepository } from '../data/health-running-distance-observation-repository.js';
 import { createHealthRunningDurationObservationRepository } from '../data/health-running-duration-observation-repository.js';
@@ -51,6 +52,8 @@ export function loadExperimentDay(
         createWealthRevenueObservationRepository(database),
       opportunityObservationRepository:
         createOpportunityObservationRepository(database),
+      evidenceObservationRepository:
+        createEvidenceObservationRepository(database),
     });
 
     return {

@@ -49,6 +49,7 @@ function createResult(
       overrides.healthRunningDurationObservations ?? [],
     wealthRevenueObservations: overrides.wealthRevenueObservations ?? [],
     opportunityObservations: overrides.opportunityObservations ?? [],
+    evidenceObservations: overrides.evidenceObservations ?? [],
     threeSixNineSessions: overrides.threeSixNineSessions ?? [],
   };
 }
