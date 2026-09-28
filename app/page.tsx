@@ -3,9 +3,17 @@ import { loadExperimentDay } from "../src/application/load-experiment-day.js";
 import { ExperimentDayView } from "../src/components/experiment-day-view.js";
 
 const experimentId = "108-day-experiment";
-const dayNumber = 1;
 
-export default function HomePage() {
+type HomePageProps = {
+  searchParams: Promise<{ day?: string }>;
+};
+
+export default async function HomePage({ searchParams }: HomePageProps) {
+  const params = await searchParams;
+  const dayNumber = Number(
+    params.day ?? process.env.EXPERIMENT_DAY_NUMBER ?? "1",
+  );
+
   const database = createDatabase();
 
   try {

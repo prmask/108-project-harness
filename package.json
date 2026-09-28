@@ -12,7 +12,8 @@
     "build": "next build",
     "verify": "pnpm lint && pnpm typecheck && pnpm test",
     "db:backup": "node scripts/db-backup.mjs",
-    "db:restore": "node scripts/db-restore.mjs"
+    "db:restore": "node scripts/db-restore.mjs",
+    "test:e2e": "playwright test"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +28,7 @@
   "type": "module",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.63.0",
     "@types/better-sqlite3": "^9.6.0",
     "@types/node": "^26.5.1",
     "@types/react": "^19.3.0",
