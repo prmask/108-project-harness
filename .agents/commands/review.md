@@ -1,9 +1,9 @@
 ---
 command: /review
-workflow: .agents/workflows/new-feature.md
+workflow: engineering-harness/core/workflows/new-feature.md
 skills:
-  - .agents/skills/code-review/SKILL.md
-  - .agents/skills/ux-ui-design/SKILL.md
+  - engineering-harness/skills/code-review/SKILL.md
+  - engineering-harness/skills/ux-ui-design/SKILL.md
 ---
 
 # /review

@@ -35,8 +35,8 @@ habit tracker.
 Before designing, read the relevant project sources in this order:
 
 1.  `AGENTS.md`
-2.  `docs/experiment/EXPERIMENT.md`
-3.  `docs/experiment/HYPOTHESES.md`
+2.  `docs/specification/EXPERIMENT.md`
+3.  `docs/specification/HYPOTHESES.md`
 4.  `docs/product/PRODUCT.md` when available
 5.  `docs/product/USER-FLOWS.md` when available
 6.  Relevant architecture and ADR documents

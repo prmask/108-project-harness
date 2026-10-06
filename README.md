@@ -37,7 +37,7 @@ Architecture Decision Records
     ↓
 Research
     ↓
-.agents/memory
+engineering-harness02/core/memory (mirrored at .agents/memory)
 ```
 
 `AGENTS.md` is the project constitution. The documents under `docs/` are authoritative project knowledge. ADRs record meaningful architectural decisions. Memory provides context but is not authority.
@@ -46,12 +46,12 @@ Research
 
 The project uses:
 
-- `.agents/agents/` — specialist agents
-- `.agents/skills/` — reusable methods
-- `.agents/workflows/` — documented processes
-- `.agents/commands/` — thin command entry points
-- `.agents/hooks/` — automatic guardrails
-- `.agents/memory/` — durable non-authoritative context
+- `engineering-harness02/agents/` — specialist agents (accessible via `.agents/agents/`)
+- `engineering-harness02/skills/` — reusable methods (accessible via `.agents/skills/`)
+- `engineering-harness02/core/workflows/` — documented processes (accessible via `.agents/workflows/`)
+- `engineering-harness02/commands/` — thin command entry points (accessible via `.agents/commands/`)
+- `engineering-harness02/hooks/` — automatic guardrails (accessible via `.agents/hooks/`)
+- `engineering-harness02/core/memory/` — durable non-authoritative context (accessible via `.agents/memory/`)
 
 ## UI/UX
 

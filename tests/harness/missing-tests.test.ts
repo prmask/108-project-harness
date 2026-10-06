@@ -2,14 +2,14 @@ import { execFileSync } from 'node:child_process';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, test } from 'vitest';
-import { createGitTestRepo } from './helpers/git-test-repo.js';
+import { createGitTestRepo, getBashPath } from './helpers/git-test-repo.js';
 
 const root = process.cwd();
-const hook = join(root, '.agents/hooks/check-missing-tests.sh');
+const hook = join(root, 'engineering-harness/hooks/check-missing-tests.sh');
 
 function runHook(repo: string, env?: Partial<NodeJS.ProcessEnv>) {
   try {
-    const output = execFileSync('bash', [hook], {
+    const output = execFileSync(getBashPath(), [hook], {
       cwd: repo,
       encoding: 'utf8',
       env: {

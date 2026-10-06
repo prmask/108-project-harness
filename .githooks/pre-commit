@@ -2,4 +2,4 @@
 set -euo pipefail
 
 ROOT="$(git rev-parse --show-toplevel)"
-exec "$ROOT/.agents/hooks/pre-commit.sh"
+exec "$ROOT/engineering-harness/hooks/pre-commit.sh"

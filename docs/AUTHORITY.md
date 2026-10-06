@@ -134,6 +134,13 @@ It must not be used to silently override the experiment or product specification
 
 Skills define reusable methods for performing work.
 
+Relevant locations include:
+
+```text
+engineering-harness02/skills/
+(mirrored at .agents/skills/)
+```
+
 Examples include:
 
 - research-first;
@@ -141,14 +148,20 @@ Examples include:
 - TDD;
 - database changes;
 - code review;
-- security review;
-- experiment integrity.
+- security review.
 
 Skills describe **how** to perform work. They do not create or override product or experiment requirements.
 
 ## 7. Memory
 
 Project memory provides durable context that may help agents work efficiently.
+
+Relevant locations include:
+
+```text
+engineering-harness02/core/memory/
+(mirrored at .agents/memory/)
+```
 
 Memory is not authoritative.
 

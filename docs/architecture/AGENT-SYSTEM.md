@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The 108-Day Experiment uses a small, specialized AI engineering team rather than a large collection of generic agents. The agents are project-local instructions stored under `.agents/agents/`.
+The 108-Day Experiment uses a small, specialized AI engineering team rather than a large collection of generic agents. The agents are stored under `engineering-harness02/agents/` (accessible via `.agents/agents/`).
 
 The system is designed around:
 
@@ -23,7 +23,7 @@ Agents do not replace the project's source-of-truth documents. They operate with
 | 7 | `code-reviewer` | Fresh-context review for correctness, maintainability, security, tests, and approved design/spec adherence. |
 | 8 | `security-reviewer` | Review secrets, local data, filesystem/tool access, injection, dependencies, APIs, and agent permissions. |
 | 9 | `data-integrity` | Protect historical experiment data, scoring, calculations, migrations, and reproducibility. |
-| 10 | `experiment-scientist` | Protect scientific validity, evidence interpretation, analytics, and resistance to confirmation bias. |
+| 10 | `experiment-scientist` | Protect scientific validity, evidence interpretation, analytics, and resistance to confirmation bias (domain-specific). |
 | 11 | `release-engineer` | Verify builds, tests, migrations, backups, security, release readiness, and documentation. |
 
 ## Where Information Belongs
@@ -32,7 +32,8 @@ Agents do not replace the project's source-of-truth documents. They operate with
 Put agent-specific instructions in:
 
 ```text
-.agents/agents/<agent-name>.md
+engineering-harness02/agents/<agent-name>.md
+(accessible via .agents/agents/<agent-name>.md)
 ```
 
 These files define role, responsibilities, rules, collaboration, and output expectations.
@@ -79,7 +80,8 @@ Use ADRs for important decisions that should remain historically traceable.
 Put reusable procedures in:
 
 ```text
-.agents/skills/
+engineering-harness02/skills/
+(accessible via .agents/skills/)
 ```
 
 A skill describes how to perform a recurring type of work. It is not another agent.
@@ -88,7 +90,8 @@ A skill describes how to perform a recurring type of work. It is not another age
 Put repeatable development processes in:
 
 ```text
-.agents/workflows/
+engineering-harness02/core/workflows/
+(accessible via .agents/workflows/)
 ```
 
 Examples: new feature, bug fix, database migration, experiment change, security change, and release.
@@ -97,7 +100,8 @@ Examples: new feature, bug fix, database migration, experiment change, security 
 Put non-authoritative working memory in:
 
 ```text
-.agents/memory/
+engineering-harness02/core/memory/
+(accessible via .agents/memory/)
 ```
 
 Memory must never override the project specifications or explicit current instructions.

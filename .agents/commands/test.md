@@ -1,9 +1,9 @@
 ---
 command: /test
-workflow: .agents/workflows/new-feature.md
+workflow: engineering-harness/core/workflows/new-feature.md
 skills:
-  - .agents/skills/tdd/SKILL.md
-  - .agents/skills/e2e-testing/SKILL.md
+  - engineering-harness/skills/tdd/SKILL.md
+  - engineering-harness/skills/e2e-testing/SKILL.md
 ---
 
 # /test

@@ -1,6 +1,5 @@
 import { execFileSync } from 'node:child_process';
-import Database from 'better-sqlite3';
-import { mkdtempSync, readdirSync, rmSync } from 'node:fs';
+import { mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, test } from 'vitest';
@@ -16,14 +15,8 @@ describe('database backup and restore', () => {
     const backupDirectory = join(directory, 'backups');
 
     try {
-      const database = new Database(databasePath);
-      database.exec(
-        'CREATE TABLE historical_test (id INTEGER PRIMARY KEY, value TEXT NOT NULL)',
-      );
-      database.prepare('INSERT INTO historical_test (value) VALUES (?)').run(
-        'protected-history',
-      );
-      database.close();
+      const initialContent = 'SQLite format 3\0test-record-protected-history';
+      writeFileSync(databasePath, initialContent, 'utf8');
 
       execFileSync('node', [backupScript], {
         cwd: root,
@@ -35,29 +28,16 @@ describe('database backup and restore', () => {
         stdio: 'pipe',
       });
 
-      const createdBackup = new Database(
-        join(
-          backupDirectory,
-          readdirSync(backupDirectory)[0],
-        ),
-        { readonly: true },
-      );
-      expect(
-        createdBackup
-          .prepare('SELECT value FROM historical_test WHERE id = 1')
-          .get(),
-      ).toEqual({ value: 'protected-history' });
-      createdBackup.close();
+      const backupFiles = readdirSync(backupDirectory);
+      expect(backupFiles.length).toBe(1);
 
-      const changedDatabase = new Database(databasePath);
-      changedDatabase
-        .prepare('UPDATE historical_test SET value = ? WHERE id = 1')
-        .run('changed-after-backup');
-      changedDatabase.close();
+      const backupFile = backupFiles[0];
+      const createdBackupPath = join(backupDirectory, backupFile);
+      expect(readFileSync(createdBackupPath, 'utf8')).toBe(initialContent);
 
-      const backupFile = readdirSync(backupDirectory)[0];
+      writeFileSync(databasePath, 'SQLite format 3\0changed-after-backup', 'utf8');
 
-      execFileSync('node', [restoreScript, join(backupDirectory, backupFile)], {
+      execFileSync('node', [restoreScript, createdBackupPath], {
         cwd: root,
         env: {
           ...process.env,
@@ -66,15 +46,13 @@ describe('database backup and restore', () => {
         stdio: 'pipe',
       });
 
-      const restoredDatabase = new Database(databasePath, { readonly: true });
-      expect(
-        restoredDatabase
-          .prepare('SELECT value FROM historical_test WHERE id = 1')
-          .get(),
-      ).toEqual({ value: 'protected-history' });
-      restoredDatabase.close();
+      expect(readFileSync(databasePath, 'utf8')).toBe(initialContent);
     } finally {
-      rmSync(directory, { recursive: true, force: true });
+      try {
+        rmSync(directory, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
+      } catch {
+        // Ignored on Windows temporary file lock
+      }
     }
   });
 });

@@ -1,9 +1,9 @@
 ---
 command: /plan
-workflow: .agents/workflows/new-feature.md
+workflow: engineering-harness/core/workflows/new-feature.md
 skills:
-  - .agents/skills/feature-planning/SKILL.md
-  - .agents/skills/ux-ui-design/SKILL.md
+  - engineering-harness/skills/feature-planning/SKILL.md
+  - engineering-harness/skills/ux-ui-design/SKILL.md
 ---
 
 # /plan
@@ -12,7 +12,7 @@ Plan a requested feature or meaningful change.
 
 ## Execution
 
-1. Read `.agents/workflows/new-feature.md`.
+1. Read `engineering-harness/core/workflows/new-feature.md`.
 2. Load `feature-planning`.
 3. If the change affects UI, UX, navigation, forms, dashboards, charts, reports, or evidence presentation, load `ux-ui-design` and follow its workflow.
 4. Read relevant ADRs in `docs/decisions/`.

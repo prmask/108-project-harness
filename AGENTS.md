@@ -83,8 +83,8 @@ When information conflicts, use the following order of authority:
 3. Product specification
 4. Architecture decisions
 5. AGENTS.md
-6. Skills
-7. Memory
+6. Skills (`engineering-harness02/skills/`, accessible via `.agents/skills/`)
+7. Memory (`engineering-harness02/core/memory/`, accessible via `.agents/memory/`)
 8. Agent assumptions
 
 Lower-level information must not silently override higher-level information.
@@ -867,6 +867,8 @@ Project memory is useful for:
 - development preferences
 - temporary context
 - handoffs
+
+Stored under `engineering-harness02/core/memory/` (accessible via `.agents/memory/`).
 
 Memory is not authoritative.
 

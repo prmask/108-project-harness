@@ -2,9 +2,8 @@
 command: /verify
 workflow: workflow selected by the change
 skills:
-  - .agents/skills/tdd/SKILL.md
-  - .agents/skills/e2e-testing/SKILL.md
-  - .agents/skills/experiment-integrity/SKILL.md
+  - engineering-harness/skills/tdd/SKILL.md
+  - engineering-harness/skills/e2e-testing/SKILL.md
 ---
 
 # /verify

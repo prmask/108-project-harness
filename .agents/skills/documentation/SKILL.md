@@ -5,15 +5,15 @@ Keep project documentation accurate, discoverable, and aligned with the implemen
 
 ## Information Placement
 - Project-wide rules: `AGENTS.md`
-- Agent behavior: `.agents/agents/`
-- Reusable procedures: `.agents/skills/`
-- Agent collaboration: `.agents/workflows/`
-- Experiment truth: `docs/experiment/`
+- Agent behavior: `engineering-harness/agents/`
+- Reusable procedures: `engineering-harness/skills/`
+- Agent collaboration: `engineering-harness/core/workflows/`
+- Experiment truth: `docs/specification/`
 - Product requirements: `docs/product/`
 - Technical architecture: `docs/architecture/`
 - Decisions: `docs/decisions/`
 - Research: `docs/research/`
-- Non-authoritative context: `.agents/memory/`
+- Non-authoritative context: `engineering-harness/core/memory/`
 
 ## Procedure
 1. Identify what changed.

@@ -5,11 +5,13 @@ import { join } from 'node:path';
 const [, , command, ...args] = process.argv;
 
 if (!command) {
-  console.error('Usage: node .harness/record-evidence.mjs <command> [args...]');
+  console.error(
+    'Usage: node engineering-harness/core/evidence/record-evidence.mjs <command> [args...]',
+  );
   process.exit(2);
 }
 
-const evidenceDir = join(process.cwd(), '.harness', 'evidence');
+const evidenceDir = join(process.cwd(), 'engineering-harness', 'core', 'evidence');
 
 mkdirSync(evidenceDir, { recursive: true });
 
@@ -30,6 +32,7 @@ let exitCode = 0;
 try {
   execFileSync(command, args, {
     stdio: 'inherit',
+    shell: process.platform === 'win32',
   });
 } catch (error) {
   if (

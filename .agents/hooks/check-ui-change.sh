@@ -10,20 +10,19 @@ if [ -n "$ui_changed" ]; then
   printf '%s\n' "$ui_changed"
   echo
   echo "Review whether this is a significant UX/UI change."
-  echo "Significant changes should follow .agents/workflows/ux-ui-design.md."
+  echo "Significant changes should follow engineering-harness/core/workflows/ux-ui-design.md."
 fi
 
-experiment_ui_changed="$(printf '%s\n' "$changed" | grep -Ei '(dashboard|analytics|chart|hypothesis|experiment|evidence|report)' | grep -E '(^|/)(src|docs)(/|$)' || true)"
+data_ui_changed="$(printf '%s\n' "$changed" | grep -Ei '(dashboard|analytics|chart|metrics|report)' | grep -E '(^|/)(src|docs)(/|$)' || true)"
 
-if [ -n "$experiment_ui_changed" ]; then
+if [ -n "$data_ui_changed" ]; then
   echo
-  echo "WARNING: Experiment-facing UI/analytics modified."
-  printf '%s\n' "$experiment_ui_changed"
+  echo "WARNING: Data-facing UI/analytics modified."
+  printf '%s\n' "$data_ui_changed"
   echo
   echo "Verify that the change:"
   echo "  - does not hide unfavorable evidence"
   echo "  - does not display missing data as zero"
   echo "  - does not imply causation from correlation"
   echo "  - preserves observation vs interpretation"
-  echo "  - preserves historical scoring visibility"
 fi

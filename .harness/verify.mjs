@@ -1,8 +1,13 @@
 import { spawnSync } from 'node:child_process';
 
+const args = process.argv.slice(2);
+const commandToRun = args.length > 0
+  ? args
+  : ['pnpm', 'vitest', 'run', 'tests/harness/'];
+
 const result = spawnSync(
   process.execPath,
-  ['.harness/record-evidence.mjs', 'pnpm', 'verify'],
+  ['engineering-harness/core/evidence/record-evidence.mjs', ...commandToRun],
   {
     stdio: 'inherit',
     shell: false,

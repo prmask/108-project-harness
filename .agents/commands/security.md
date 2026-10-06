@@ -1,8 +1,8 @@
 ---
 command: /security
-workflow: .agents/workflows/security-change.md
+workflow: engineering-harness/core/workflows/security-change.md
 skills:
-  - .agents/skills/security-review/SKILL.md
+  - engineering-harness/skills/security-review/SKILL.md
 ---
 
 # /security
@@ -11,7 +11,7 @@ Review a change for security risks.
 
 ## Execution
 
-1. Read `.agents/workflows/security-change.md`.
+1. Read `engineering-harness/core/workflows/security-change.md`.
 2. Load `security-review`.
 3. Inspect inputs, authentication/authorization where relevant, secrets, data exposure, dependencies, filesystem/database access, and unsafe operations.
 4. Consider the local-first threat model and experiment-data confidentiality/integrity.

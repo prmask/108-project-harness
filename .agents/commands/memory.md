@@ -8,22 +8,22 @@ Record, update, verify, or promote durable project context.
 
 ## Execution
 
-1. Read the relevant files under `.agents/memory/`.
+1. Read the relevant files under `engineering-harness/core/memory/`.
 2. Determine whether the information belongs in memory or in an authoritative document.
 3. Verify consequential information against current project truth before recording it.
-4. Store durable non-authoritative context in `.agents/memory/` only when appropriate.
+4. Store durable non-authoritative context in `engineering-harness/core/memory/` only when appropriate.
 5. Promote important architectural, product, experiment, or UX/UI decisions into their authoritative documents rather than relying on memory.
 6. Mark stale memory when practical.
 
 ## Memory Structure
 
-- `.agents/memory/project.md` — durable project context
-- `.agents/memory/architecture.md` — working technical context
-- `.agents/memory/decisions.md` — non-authoritative decision memory
-- `.agents/memory/lessons.md` — lessons learned
-- `.agents/memory/bugs.md` — recurring or important bug context
-- `.agents/memory/preferences.md` — development preferences
-- `.agents/memory/handoffs/` — temporary agent/session context
+- `engineering-harness/core/memory/project.md` — durable project context
+- `engineering-harness/core/memory/architecture.md` — working technical context
+- `engineering-harness/core/memory/decisions.md` — non-authoritative decision memory
+- `engineering-harness/core/memory/lessons.md` — lessons learned
+- `engineering-harness/core/memory/bugs.md` — recurring or important bug context
+- `engineering-harness/core/memory/preferences.md` — development preferences
+- `engineering-harness/core/memory/handoffs/` — temporary agent/session context
 
 ## Authority
 

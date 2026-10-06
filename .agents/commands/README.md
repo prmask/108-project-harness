@@ -24,12 +24,10 @@ Commands are **user-facing entry points**, not independent workflows. Each comma
 | `/test` | `new-feature.md` | `tdd`, `e2e-testing` |
 | `/review` | `new-feature.md` review stages; conditional specialist review | `code-review`; `ux-ui-design` when UI changes |
 
-Specialist agents are selected conditionally by the review workflow: `data-integrity` + `experiment-scientist` for experiment changes, and `security-reviewer` for security-sensitive changes.
+Specialist agents are selected conditionally by the review workflow: `data-integrity` 
 | `/security` | `security-change.md` | `security-review` |
 | `/verify` | relevant workflow's verification stage | `tdd`, `e2e-testing`, `experiment-integrity` |
-| `/memory` | `.agents/memory/` architecture | — |
-| `/experiment-review` | `experiment-change.md` / `weekly-review.md` as applicable | `experiment-integrity`, `data-analysis` |
-| `/weekly-review` | `weekly-review.md` | `data-analysis`, `experiment-integrity` |
+| `/memory` | `engineering-harness/core/memory/` architecture | — |
 | `/release` | `release.md` | `release` |
 
 ## Invocation contract

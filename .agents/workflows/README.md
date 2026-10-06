@@ -18,9 +18,9 @@ Workflows define **in what order** agents and skills collaborate.
 ## Relationship
 
 - `AGENTS.md` = project-wide rules
-- `.agents/agents/` = who performs specialized work
-- `.agents/skills/` = how reusable tasks are performed
-- `.agents/workflows/` = in what order work is performed
+- `engineering-harness/agents/` = who performs specialized work
+- `engineering-harness/skills/` = how reusable tasks are performed
+- `engineering-harness/core/workflows/` = in what order work is performed
 - `docs/` = authoritative project and experiment information
 
 The UX/UI workflow is intentionally separate because interface design affects both usability and how experiment evidence is perceived.

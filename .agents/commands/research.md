@@ -1,8 +1,8 @@
 ---
 command: /research
-workflow: .agents/workflows/research.md
+workflow: engineering-harness/core/workflows/research.md
 skills:
-  - .agents/skills/research-first/SKILL.md
+  - engineering-harness/skills/research-first/SKILL.md
 ---
 
 # /research
@@ -11,7 +11,7 @@ Research a question, requirement, technology, architectural option, or uncertain
 
 ## Execution
 
-1. Read `.agents/workflows/research.md`.
+1. Read `engineering-harness/core/workflows/research.md`.
 2. Load `research-first`.
 3. Identify what is known, unknown, and decision-relevant.
 4. Consult authoritative project documents and relevant ADRs.
